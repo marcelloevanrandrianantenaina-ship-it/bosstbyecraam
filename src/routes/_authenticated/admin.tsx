@@ -159,7 +159,7 @@ function OrdersAdmin() {
   }
   useEffect(() => { load(); }, []);
   async function setStatus(id: string, status: string) {
-    const { error } = await supabase.from("orders").update({ status, progress: status === "completed" ? 100 : status === "in_progress" ? 50 : 0 }).eq("id", id);
+    const { error } = await supabase.from("orders").update({ status: status as any, progress: status === "completed" ? 100 : status === "in_progress" ? 50 : 0 }).eq("id", id);
     if (error) return toast.error(error.message);
     toast.success("Statut mis à jour"); load();
   }
