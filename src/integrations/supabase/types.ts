@@ -14,16 +14,351 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_logs: {
+        Row: {
+          action: string
+          admin_id: string | null
+          created_at: string
+          id: string
+          metadata: Json | null
+          target_id: string | null
+          target_type: string | null
+        }
+        Insert: {
+          action: string
+          admin_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Update: {
+          action?: string
+          admin_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Relationships: []
+      }
+      announcements: {
+        Row: {
+          content: string
+          created_at: string
+          ends_at: string | null
+          id: string
+          is_active: boolean
+          sort_order: number
+          starts_at: string | null
+          title: string
+          type: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          starts_at?: string | null
+          title: string
+          type?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          starts_at?: string | null
+          title?: string
+          type?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          is_read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          created_at: string
+          id: string
+          link: string
+          notes: string | null
+          progress: number
+          quantity: number
+          service_id: string
+          service_name: string
+          status: Database["public"]["Enums"]["order_status"]
+          total_price: number
+          unit_price: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          link: string
+          notes?: string | null
+          progress?: number
+          quantity: number
+          service_id: string
+          service_name: string
+          status?: Database["public"]["Enums"]["order_status"]
+          total_price: number
+          unit_price: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          link?: string
+          notes?: string | null
+          progress?: number
+          quantity?: number
+          service_id?: string
+          service_name?: string
+          status?: Database["public"]["Enums"]["order_status"]
+          total_price?: number
+          unit_price?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pricing_settings: {
+        Row: {
+          auto_update_enabled: boolean
+          global_margin_pct: number
+          id: number
+          mode: string
+          updated_at: string
+        }
+        Insert: {
+          auto_update_enabled?: boolean
+          global_margin_pct?: number
+          id?: number
+          mode?: string
+          updated_at?: string
+        }
+        Update: {
+          auto_update_enabled?: boolean
+          global_margin_pct?: number
+          id?: number
+          mode?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          balance: number
+          client_id: string
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          balance?: number
+          client_id?: string
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          balance?: number
+          client_id?: string
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      recharges: {
+        Row: {
+          admin_note: string | null
+          amount: number
+          created_at: string
+          id: string
+          method: string
+          processed_at: string | null
+          reference: string | null
+          status: Database["public"]["Enums"]["recharge_status"]
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          amount: number
+          created_at?: string
+          id?: string
+          method?: string
+          processed_at?: string | null
+          reference?: string | null
+          status?: Database["public"]["Enums"]["recharge_status"]
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          amount?: number
+          created_at?: string
+          id?: string
+          method?: string
+          processed_at?: string | null
+          reference?: string | null
+          status?: Database["public"]["Enums"]["recharge_status"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          badge: Database["public"]["Enums"]["service_badge"]
+          created_at: string
+          description: string | null
+          estimated_time: string | null
+          id: string
+          is_active: boolean
+          margin_pct: number
+          max_quantity: number
+          min_quantity: number
+          name: string
+          platform: Database["public"]["Enums"]["service_platform"]
+          price_per_1k: number
+          sort_order: number
+          supplier_price_per_1k: number
+          updated_at: string
+        }
+        Insert: {
+          badge?: Database["public"]["Enums"]["service_badge"]
+          created_at?: string
+          description?: string | null
+          estimated_time?: string | null
+          id?: string
+          is_active?: boolean
+          margin_pct?: number
+          max_quantity?: number
+          min_quantity?: number
+          name: string
+          platform: Database["public"]["Enums"]["service_platform"]
+          price_per_1k?: number
+          sort_order?: number
+          supplier_price_per_1k?: number
+          updated_at?: string
+        }
+        Update: {
+          badge?: Database["public"]["Enums"]["service_badge"]
+          created_at?: string
+          description?: string | null
+          estimated_time?: string | null
+          id?: string
+          is_active?: boolean
+          margin_pct?: number
+          max_quantity?: number
+          min_quantity?: number
+          name?: string
+          platform?: Database["public"]["Enums"]["service_platform"]
+          price_per_1k?: number
+          sort_order?: number
+          supplier_price_per_1k?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "sub_admin" | "user"
+      order_status:
+        | "pending"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+        | "refunded"
+      recharge_status: "pending" | "approved" | "rejected"
+      service_badge: "none" | "top" | "new" | "fast"
+      service_platform: "facebook" | "tiktok"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +485,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "sub_admin", "user"],
+      order_status: [
+        "pending",
+        "in_progress",
+        "completed",
+        "cancelled",
+        "refunded",
+      ],
+      recharge_status: ["pending", "approved", "rejected"],
+      service_badge: ["none", "top", "new", "fast"],
+      service_platform: ["facebook", "tiktok"],
+    },
   },
 } as const
