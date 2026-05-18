@@ -96,20 +96,26 @@ function Index() {
         </div>
 
         <Tabs defaultValue="facebook">
-          <TabsList className="glass border-border/60 w-full grid grid-cols-2 mb-4 h-11">
-            <TabsTrigger value="facebook" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground rounded-lg">Facebook</TabsTrigger>
-            <TabsTrigger value="tiktok" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground rounded-lg">TikTok</TabsTrigger>
+          <TabsList className="glass border-border/60 w-full grid grid-cols-3 mb-4 h-11">
+            <TabsTrigger value="facebook" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground rounded-lg text-xs sm:text-sm">Facebook</TabsTrigger>
+            <TabsTrigger value="tiktok" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground rounded-lg text-xs sm:text-sm">TikTok</TabsTrigger>
+            <TabsTrigger value="instagram" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground rounded-lg text-xs sm:text-sm">Instagram</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="facebook" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <TabsContent value="facebook" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 auto-rows-fr">
             {services === null
-              ? Array.from({ length: 6 }).map((_, i) => <div key={i} className="skeleton h-40" />)
+              ? Array.from({ length: 4 }).map((_, i) => <div key={i} className="skeleton h-44" />)
               : fb.map((s) => <ServiceCard key={s.id} s={s} />)}
           </TabsContent>
-          <TabsContent value="tiktok" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <TabsContent value="tiktok" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 auto-rows-fr">
             {services === null
-              ? Array.from({ length: 3 }).map((_, i) => <div key={i} className="skeleton h-40" />)
+              ? Array.from({ length: 3 }).map((_, i) => <div key={i} className="skeleton h-44" />)
               : tt.map((s) => <ServiceCard key={s.id} s={s} />)}
+          </TabsContent>
+          <TabsContent value="instagram" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 auto-rows-fr">
+            {services === null
+              ? Array.from({ length: 1 }).map((_, i) => <div key={i} className="skeleton h-44" />)
+              : ig.map((s) => <ServiceCard key={s.id} s={s} />)}
           </TabsContent>
         </Tabs>
       </section>
@@ -119,21 +125,25 @@ function Index() {
         <div className="mx-auto max-w-6xl px-4 py-8 grid sm:grid-cols-3 gap-6">
           <div>
             <div className="text-lg font-bold"><span className="text-gradient">ẞoost</span>-by Ecr_aaM</div>
-            <p className="text-xs text-muted-foreground mt-1">⚡ Service disponible 24h/24</p>
+            <p className="text-xs text-muted-foreground mt-1">⚡ Site dispo 24h/24 • 7j/7</p>
             <p className="text-xs text-muted-foreground mt-3">© 2026 — Tous droits réservés</p>
           </div>
           <div>
             <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Liens rapides</div>
             <ul className="text-sm space-y-1.5">
               <li><Link to="/" className="hover:text-accent">Accueil</Link></li>
-              <li><Link to="/auth" className="hover:text-accent">Connexion</Link></li>
-              <li><Link to="/dashboard" className="hover:text-accent">Mon compte</Link></li>
+              {user ? (
+                <li><Link to="/dashboard" className="hover:text-accent">Mon compte</Link></li>
+              ) : (
+                <li><Link to="/auth" className="hover:text-accent">Connexion</Link></li>
+              )}
+              <li><Link to="/recharge" className="hover:text-accent">Recharger</Link></li>
             </ul>
           </div>
           <div>
-            <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Support</div>
+            <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Support · {WHATSAPP_NUMBER}</div>
             <a href={waLink("Bonjour, j'ai une question")} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm hover:text-accent">
-              <MessageCircle className="h-4 w-4" /> WhatsApp Support
+              <MessageCircle className="h-4 w-4" /> WhatsApp / SMS
             </a>
           </div>
         </div>
