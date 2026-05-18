@@ -224,9 +224,17 @@ function RechargesAdmin() {
       {rows?.length === 0 && <p className="text-sm text-muted-foreground text-center py-8">Aucune recharge</p>}
       {rows?.map((r) => (
         <div key={r.id} className="glass rounded-xl p-3 flex items-center justify-between gap-2 flex-wrap">
-          <div>
+          <div className="min-w-0">
             <div className="font-semibold">{formatPrice(r.amount)}</div>
-            <div className="text-[11px] text-muted-foreground">{r.profiles?.client_id} · {r.profiles?.full_name ?? "—"} · {new Date(r.created_at).toLocaleString("fr-FR")}</div>
+            <div className="text-[11px] text-muted-foreground">
+              {r.profiles?.client_id} · {r.profiles?.full_name ?? "—"} · {new Date(r.created_at).toLocaleString("fr-FR")}
+            </div>
+            {(r.reference || r.sender_number) && (
+              <div className="text-[11px] text-accent mt-0.5">
+                {r.sender_number && <>📱 {r.sender_number}</>}
+                {r.reference && <> · 🔖 {r.reference}</>}
+              </div>
+            )}
           </div>
           {r.status === "pending" ? (
             <div className="flex gap-1.5">
