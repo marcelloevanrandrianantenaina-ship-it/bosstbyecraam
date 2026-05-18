@@ -232,6 +232,7 @@ export type Database = {
           method: string
           processed_at: string | null
           reference: string | null
+          sender_number: string | null
           status: Database["public"]["Enums"]["recharge_status"]
           user_id: string
         }
@@ -243,6 +244,7 @@ export type Database = {
           method?: string
           processed_at?: string | null
           reference?: string | null
+          sender_number?: string | null
           status?: Database["public"]["Enums"]["recharge_status"]
           user_id: string
         }
@@ -254,6 +256,7 @@ export type Database = {
           method?: string
           processed_at?: string | null
           reference?: string | null
+          sender_number?: string | null
           status?: Database["public"]["Enums"]["recharge_status"]
           user_id?: string
         }
@@ -358,7 +361,7 @@ export type Database = {
         | "refunded"
       recharge_status: "pending" | "approved" | "rejected"
       service_badge: "none" | "top" | "new" | "fast"
-      service_platform: "facebook" | "tiktok"
+      service_platform: "facebook" | "tiktok" | "instagram"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -496,7 +499,7 @@ export const Constants = {
       ],
       recharge_status: ["pending", "approved", "rejected"],
       service_badge: ["none", "top", "new", "fast"],
-      service_platform: ["facebook", "tiktok"],
+      service_platform: ["facebook", "tiktok", "instagram"],
     },
   },
 } as const
