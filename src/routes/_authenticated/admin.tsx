@@ -310,7 +310,7 @@ function ServicesAdmin() {
               <div><Label>Plateforme</Label>
                 <Select value={editing.platform} onValueChange={(v) => setEditing({ ...editing, platform: v })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent><SelectItem value="facebook">Facebook</SelectItem><SelectItem value="tiktok">TikTok</SelectItem></SelectContent>
+                  <SelectContent><SelectItem value="facebook">Facebook</SelectItem><SelectItem value="tiktok">TikTok</SelectItem><SelectItem value="instagram">Instagram</SelectItem></SelectContent>
                 </Select></div>
               <div><Label>Badge</Label>
                 <Select value={editing.badge} onValueChange={(v) => setEditing({ ...editing, badge: v })}>
