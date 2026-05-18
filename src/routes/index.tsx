@@ -23,6 +23,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { user } = useAuth();
   const [services, setServices] = useState<Service[] | null>(null);
   const [dataSaver, setDataSaver] = useState(false);
 
@@ -34,6 +35,7 @@ function Index() {
 
   const fb = services?.filter((s) => s.platform === "facebook") ?? [];
   const tt = services?.filter((s) => s.platform === "tiktok") ?? [];
+  const ig = services?.filter((s) => s.platform === "instagram") ?? [];
 
   return (
     <div className="min-h-screen">
