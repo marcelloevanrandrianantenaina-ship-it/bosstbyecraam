@@ -8,8 +8,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Zap, ShieldCheck, Rocket, ArrowRight, MessageCircle } from "lucide-react";
-import { BRAND, waLink } from "@/lib/constants";
+import { Sparkles, Zap, ShieldCheck, Rocket, ArrowRight, MessageCircle, LayoutDashboard } from "lucide-react";
+import { waLink, WHATSAPP_NUMBER } from "@/lib/constants";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
