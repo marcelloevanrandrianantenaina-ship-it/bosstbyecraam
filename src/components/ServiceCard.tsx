@@ -140,10 +140,13 @@ export function ServiceCard({ s }: { s: Service }) {
         Service premium sécurisé
       </div>
 
-      {/* Button */}
-      <Button
-        asChild
-        className="
-          mt-5
-          h-11
-          rounded-2xl
+    {/* Button */}
+    <Button
+      asChild
+      className="mt-5 h-11 rounded-2xl"
+    >
+      <span>Continuer</span>
+    </Button>
+  );
+      }
+      
