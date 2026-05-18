@@ -41,43 +41,128 @@ function Index() {
     <div className="min-h-screen">
       <AppHeader />
       <AnnouncementBar />
+{/* Hero Premium */}
+<section className="relative px-4 pt-14 pb-14 overflow-hidden">
 
-      {/* Hero */}
-      <section className="relative px-4 pt-10 pb-8 overflow-hidden">
-        <div className="absolute inset-0 -z-10" style={{ background: "var(--gradient-radial-glow)" }} />
-        <div className="mx-auto max-w-3xl text-center fade-in">
-          <span className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-semibold text-accent border border-accent/30 bg-accent/10 px-2.5 py-1 rounded-full">
-            <Zap className="h-3 w-3" /> Service disponible 24h/24
-          </span>
-          <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.05]">
-            Propulsez votre <span className="text-gradient">audience</span><br />
-            sur Facebook & TikTok
-          </h1>
-          <p className="mt-3 text-sm sm:text-base text-muted-foreground max-w-xl mx-auto">
-            Likes, vues, abonnés et partages premium. Livraison rapide, prix transparents, support direct.
-          </p>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-            <Button asChild size="lg" className="gradient-primary text-primary-foreground hover:opacity-90 glow">
-              <a href="#services">Voir les services <ArrowRight className="h-4 w-4 ml-1.5" /></a>
-            </Button>
-            {user ? (
-              <Button asChild size="lg" variant="outline" className="border-border bg-card/40 backdrop-blur">
-                <Link to="/dashboard"><LayoutDashboard className="h-4 w-4 mr-1.5" />Tableau de bord</Link>
-              </Button>
-            ) : (
-              <Button asChild size="lg" variant="outline" className="border-border bg-card/40 backdrop-blur">
-                <Link to="/auth"><Rocket className="h-4 w-4 mr-1.5" />Créer un compte</Link>
-              </Button>
-            )}
-          </div>
+  <div
+    className="absolute inset-0 -z-10 opacity-90"
+    style={{ background: "var(--gradient-radial-glow)" }}
+  />
 
-          <div className="mt-6 flex items-center justify-center gap-4 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-[oklch(0.72_0.18_155)]" /> Paiement sécurisé</span>
-            <span className="inline-flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5 text-accent" /> Qualité réelle</span>
-          </div>
+  <div className="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[520px] h-[520px] rounded-full bg-cyan-400/20 blur-3xl" />
+
+  <div className="mx-auto max-w-5xl text-center fade-in">
+
+    <div className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full border-glow glow-soft">
+      <div className="w-2 h-2 rounded-full bg-green-400 pulse-dot" />
+      <span className="text-xs font-bold uppercase tracking-widest text-accent">
+        Boost Premium • En ligne 24/7
+      </span>
+    </div>
+
+    <h1 className="mt-8 text-5xl sm:text-7xl font-black tracking-tight leading-[0.95]">
+      Faites exploser
+      <span className="block text-gradient mt-2">
+        votre audience
+      </span>
+    </h1>
+
+    <p className="mt-5 text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+      Likes • Followers • Vues • Partages premium.  
+      Livraison rapide avec support instantané WhatsApp.
+    </p>
+
+    <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+
+      <Button
+        asChild
+        size="lg"
+        className="gradient-primary glow text-primary-foreground rounded-2xl px-8 h-12 text-base font-bold"
+      >
+        <a href="#services">
+          Voir les services
+          <ArrowRight className="ml-2 h-5 w-5" />
+        </a>
+      </Button>
+
+      {user ? (
+        <Button
+          asChild
+          size="lg"
+          variant="outline"
+          className="glass border-glow rounded-2xl px-8 h-12"
+        >
+          <Link to="/dashboard">
+            <LayoutDashboard className="mr-2 h-5 w-5" />
+            Dashboard
+          </Link>
+        </Button>
+      ) : (
+        <Button
+          asChild
+          size="lg"
+          variant="outline"
+          className="glass border-glow rounded-2xl px-8 h-12"
+        >
+          <Link to="/auth">
+            <Rocket className="mr-2 h-5 w-5" />
+            Créer un compte
+          </Link>
+        </Button>
+      )}
+
+    </div>
+
+    <div className="mt-10 grid grid-cols-3 gap-3 max-w-2xl mx-auto">
+
+      <div className="glass rounded-2xl p-4 hover-lift">
+        <div className="text-2xl font-black text-gradient">
+          24/7
         </div>
-      </section>
+        <div className="text-xs text-muted-foreground mt-1">
+          Disponible
+        </div>
+      </div>
 
+      <div className="glass rounded-2xl p-4 hover-lift">
+        <div className="text-2xl font-black text-gradient">
+          +10K
+        </div>
+        <div className="text-xs text-muted-foreground mt-1">
+          Clients satisfaits
+        </div>
+      </div>
+
+      <div className="glass rounded-2xl p-4 hover-lift">
+        <div className="text-2xl font-black text-gradient">
+          ⚡
+        </div>
+        <div className="text-xs text-muted-foreground mt-1">
+          Livraison rapide
+        </div>
+      </div>
+
+    </div>
+
+    <div className="mt-8 flex items-center justify-center gap-5 text-xs text-muted-foreground flex-wrap">
+      <span className="inline-flex items-center gap-1.5">
+        <ShieldCheck className="h-4 w-4 text-green-400" />
+        Paiement sécurisé
+      </span>
+
+      <span className="inline-flex items-center gap-1.5">
+        <Sparkles className="h-4 w-4 text-cyan-400" />
+        Qualité premium
+      </span>
+
+      <span className="inline-flex items-center gap-1.5">
+        <MessageCircle className="h-4 w-4 text-primary" />
+        Support WhatsApp
+      </span>
+    </div>
+
+  </div>
+</section>
       {/* Data saver */}
       <div className="mx-auto max-w-6xl px-4">
         <div className="glass rounded-xl px-4 py-2.5 flex items-center justify-between text-xs">
