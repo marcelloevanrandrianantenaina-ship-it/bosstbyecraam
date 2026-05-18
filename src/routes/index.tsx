@@ -60,9 +60,15 @@ function Index() {
             <Button asChild size="lg" className="gradient-primary text-primary-foreground hover:opacity-90 glow">
               <a href="#services">Voir les services <ArrowRight className="h-4 w-4 ml-1.5" /></a>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-border bg-card/40 backdrop-blur">
-              <Link to="/auth"><Rocket className="h-4 w-4 mr-1.5" />Créer un compte</Link>
-            </Button>
+            {user ? (
+              <Button asChild size="lg" variant="outline" className="border-border bg-card/40 backdrop-blur">
+                <Link to="/dashboard"><LayoutDashboard className="h-4 w-4 mr-1.5" />Tableau de bord</Link>
+              </Button>
+            ) : (
+              <Button asChild size="lg" variant="outline" className="border-border bg-card/40 backdrop-blur">
+                <Link to="/auth"><Rocket className="h-4 w-4 mr-1.5" />Créer un compte</Link>
+              </Button>
+            )}
           </div>
 
           <div className="mt-6 flex items-center justify-center gap-4 text-xs text-muted-foreground">
