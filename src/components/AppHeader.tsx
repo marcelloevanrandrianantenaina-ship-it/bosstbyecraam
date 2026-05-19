@@ -170,9 +170,9 @@ function MenuExternal({ href, icon: Icon, label, badge, onClick }: { href: strin
       href={href} target="_blank" rel="noopener noreferrer" onClick={onClick}
       className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 active:scale-[0.98] transition"
     >
-      <div className="h-8 w-8 rounded-lg bg-[oklch(0.74_0.16_155)/0.15] grid place-items-center"><Icon className="h-4 w-4 text-[oklch(0.74_0.16_155)]" /></div>
+      <div className="h-8 w-8 rounded-lg bg-[oklch(0.74_0.16_155_/_0.15)] grid place-items-center"><Icon className="h-4 w-4 text-[oklch(0.74_0.16_155)]" /></div>
       <span className="text-sm font-semibold flex-1">{label}</span>
-      {badge && <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-[oklch(0.74_0.16_155)/0.15] text-[oklch(0.74_0.16_155)] border border-[oklch(0.74_0.16_155)/0.3]">{badge}</span>}
+      {badge && <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-[oklch(0.74_0.16_155_/_0.15)] text-[oklch(0.74_0.16_155)] border border-[oklch(0.74_0.16_155_/_0.3)]">{badge}</span>}
     </a>
   );
 }
