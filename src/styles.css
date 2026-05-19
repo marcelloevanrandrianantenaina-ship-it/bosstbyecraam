@@ -130,16 +130,16 @@
 
 @layer utilities {
   .glass {
-    background: linear-gradient(155deg, oklch(0.22 0.03 250 / 55%), oklch(0.15 0.025 250 / 55%));
+    background: linear-gradient(155deg, oklch(0.22 0.025 255 / 60%), oklch(0.15 0.022 255 / 60%));
     backdrop-filter: blur(14px) saturate(140%);
     -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border: 1px solid oklch(1 0 0 / 8%);
+    border: 1px solid oklch(1 0 0 / 7%);
   }
   .glass-strong {
-    background: linear-gradient(155deg, oklch(0.22 0.03 250 / 80%), oklch(0.15 0.025 250 / 80%));
+    background: linear-gradient(155deg, oklch(0.22 0.025 255 / 82%), oklch(0.15 0.022 255 / 82%));
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
-    border: 1px solid oklch(1 0 0 / 10%);
+    border: 1px solid oklch(1 0 0 / 9%);
   }
   .glow { box-shadow: var(--shadow-glow); }
   .glow-soft { box-shadow: var(--shadow-glow-soft); }
@@ -150,7 +150,7 @@
     color: transparent;
   }
   .gradient-primary { background: var(--gradient-primary); }
-  .border-glow { border: 1px solid oklch(0.68 0.22 245 / 40%); }
+  .border-glow { border: 1px solid oklch(0.78 0.17 65 / 40%); }
 
   .hover-lift { transition: transform .25s ease, box-shadow .25s ease; }
   .hover-lift:hover { transform: translateY(-2px); box-shadow: var(--shadow-glow); }
