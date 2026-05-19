@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,47 +10,94 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Shield, Loader2, Plus, Trash2, Edit, Search, Wallet, ShoppingCart, Users, TrendingUp, Settings2, Check, X } from "lucide-react";
+import { Shield, Loader2, Plus, Trash2, Edit, Search, Wallet, ShoppingCart, Users, TrendingUp, Settings2, Check, X, LayoutDashboard, Megaphone, Package } from "lucide-react";
 import { formatPrice } from "@/lib/constants";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminPage,
 });
 
+type SectionId = "overview" | "orders" | "recharges" | "services" | "clients" | "content";
+
+const SECTIONS: { id: SectionId; label: string; icon: any }[] = [
+  { id: "overview",  label: "Vue d'ensemble", icon: LayoutDashboard },
+  { id: "orders",    label: "Commandes",      icon: ShoppingCart },
+  { id: "recharges", label: "Recharges",      icon: Wallet },
+  { id: "services",  label: "Services",       icon: Package },
+  { id: "clients",   label: "Clients",        icon: Users },
+  { id: "content",   label: "Annonces",       icon: Megaphone },
+];
+
 function AdminPage() {
   const { isAdmin, loading } = useAuth();
   const navigate = useNavigate();
+  const [section, setSection] = useState<SectionId>("overview");
   useEffect(() => { if (!loading && !isAdmin) navigate({ to: "/dashboard" }); }, [isAdmin, loading, navigate]);
   if (loading) return <div className="min-h-screen grid place-items-center"><Loader2 className="animate-spin text-accent" /></div>;
   if (!isAdmin) return null;
 
+  const current = SECTIONS.find((s) => s.id === section)!;
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 fade-in">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="h-9 w-9 rounded-lg gradient-primary grid place-items-center glow-soft"><Shield className="h-4 w-4 text-primary-foreground" /></div>
-        <div>
-          <h1 className="text-2xl font-bold">Admin</h1>
-          <p className="text-xs text-muted-foreground">Console de gestion ẞoost-by Ecr_aaM</p>
-        </div>
+    <div className="min-h-[calc(100vh-3rem)] mx-auto max-w-7xl px-3 sm:px-5 py-5 fade-in">
+      <div className="grid lg:grid-cols-[240px_1fr] gap-5">
+        {/* Sidebar */}
+        <aside className="lg:sticky lg:top-16 lg:self-start">
+          <div className="glass-strong rounded-3xl p-3 border border-white/10">
+            <div className="flex items-center gap-2 px-2 py-2 mb-2">
+              <div className="h-9 w-9 rounded-xl gradient-primary grid place-items-center glow-soft">
+                <Shield className="h-4 w-4 text-primary-foreground" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-sm font-black truncate">Admin Console</div>
+                <div className="text-[10px] text-muted-foreground truncate">ẞoost-by Ecr_aaM</div>
+              </div>
+            </div>
+
+            {/* Mobile horizontal scroll, desktop vertical */}
+            <nav className="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible -mx-1 px-1 pb-1 lg:pb-0">
+              {SECTIONS.map((s) => {
+                const active = section === s.id;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setSection(s.id)}
+                    className={[
+                      "shrink-0 lg:w-full inline-flex items-center gap-2 px-3 h-10 rounded-2xl text-xs font-bold transition-all active:scale-95",
+                      active
+                        ? "gradient-primary text-primary-foreground glow-soft"
+                        : "text-muted-foreground hover:text-foreground hover:bg-white/5",
+                    ].join(" ")}
+                  >
+                    <s.icon className="h-4 w-4" />
+                    <span className="whitespace-nowrap">{s.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          <Link to="/dashboard" className="hidden lg:flex mt-3 items-center justify-center text-[11px] text-muted-foreground hover:text-accent transition">
+            ← Retour à l'app
+          </Link>
+        </aside>
+
+        {/* Content */}
+        <section className="min-w-0">
+          <div className="mb-4 flex items-center gap-2">
+            <current.icon className="h-5 w-5 text-accent" />
+            <h1 className="text-xl font-black">{current.label}</h1>
+          </div>
+          <div className="fade-in" key={section}>
+            {section === "overview" && <Overview />}
+            {section === "orders" && <OrdersAdmin />}
+            {section === "recharges" && <RechargesAdmin />}
+            {section === "services" && <ServicesAdmin />}
+            {section === "clients" && <ClientsAdmin />}
+            {section === "content" && <ContentAdmin />}
+          </div>
+        </section>
       </div>
-
-      <Tabs defaultValue="overview">
-        <TabsList className="glass border-border/60 w-full overflow-x-auto flex justify-start sm:grid sm:grid-cols-6 h-11">
-          <TabsTrigger value="overview" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground">Vue</TabsTrigger>
-          <TabsTrigger value="orders" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground">Commandes</TabsTrigger>
-          <TabsTrigger value="recharges" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground">Recharges</TabsTrigger>
-          <TabsTrigger value="services" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground">Services</TabsTrigger>
-          <TabsTrigger value="clients" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground">Clients</TabsTrigger>
-          <TabsTrigger value="content" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground">Annonces</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="mt-4"><Overview /></TabsContent>
-        <TabsContent value="orders" className="mt-4"><OrdersAdmin /></TabsContent>
-        <TabsContent value="recharges" className="mt-4"><RechargesAdmin /></TabsContent>
-        <TabsContent value="services" className="mt-4"><ServicesAdmin /></TabsContent>
-        <TabsContent value="clients" className="mt-4"><ClientsAdmin /></TabsContent>
-        <TabsContent value="content" className="mt-4"><ContentAdmin /></TabsContent>
-      </Tabs>
     </div>
   );
 }
