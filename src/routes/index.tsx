@@ -1,238 +1,359 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  Clock3,
+  Menu,
+  MessageCircle,
+  ShieldCheck,
+  Sparkles,
+  Zap,
+  Flame,
+} from "lucide-react";
+
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { AppHeader } from "@/components/AppHeader";
-import { AnnouncementBar } from "@/components/AnnouncementBar";
-import { ServiceCard, type Service } from "@/components/ServiceCard";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Sparkles, Zap, ShieldCheck, Rocket, ArrowRight, MessageCircle, LayoutDashboard } from "lucide-react";
-import { waLink, WHATSAPP_NUMBER } from "@/lib/constants";
-import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "ẞoost-by Ecr_aaM — Boost Facebook & TikTok 24/7" },
-      { name: "description", content: "Boostez vos publications, vidéos et profils. Likes, vues, abonnés, partages — service premium 24h/24." },
-    ],
-  }),
   component: Index,
 });
 
 function Index() {
-  const { user } = useAuth();
-  const [services, setServices] = useState<Service[] | null>(null);
-  const [dataSaver, setDataSaver] = useState(false);
+  const [time, setTime] = useState("");
 
   useEffect(() => {
-    supabase.from("services").select("id, name, description, price_per_1k, estimated_time, badge, platform")
-      .eq("is_active", true).order("sort_order", { ascending: true })
-      .then(({ data }) => setServices((data as Service[]) ?? []));
+    const update = () => {
+      const now = new Date();
+
+      const h = String(now.getHours()).padStart(2, "0");
+      const m = String(now.getMinutes()).padStart(2, "0");
+      const s = String(now.getSeconds()).padStart(2, "0");
+
+      setTime(`${h}:${m}:${s}`);
+    };
+
+    update();
+
+    const i = setInterval(update, 1000);
+
+    return () => clearInterval(i);
   }, []);
 
-  const fb = services?.filter((s) => s.platform === "facebook") ?? [];
-  const tt = services?.filter((s) => s.platform === "tiktok") ?? [];
-  const ig = services?.filter((s) => s.platform === "instagram") ?? [];
-
   return (
-    <div className="min-h-screen">
-      <AppHeader />
-      <AnnouncementBar />
-{/* Hero Premium */}
-<section className="relative px-4 pt-14 pb-14 overflow-hidden">
+    <div className="min-h-screen bg-[#070b14] text-white">
 
-  <div
-    className="absolute inset-0 -z-10 opacity-90"
-    style={{ background: "var(--gradient-radial-glow)" }}
-  />
+      {/* HEADER */}
 
-  <div className="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[520px] h-[520px] rounded-full bg-cyan-400/20 blur-3xl" />
+      <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl bg-black/30">
 
-  <div className="mx-auto max-w-5xl text-center fade-in">
+        <div className="flex items-center justify-between px-4 py-4">
 
-    <div className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full border-glow glow-soft">
-      <div className="w-2 h-2 rounded-full bg-green-400 pulse-dot" />
-      <span className="text-xs font-bold uppercase tracking-widest text-accent">
-        Boost Premium • En ligne 24/7
-      </span>
-    </div>
+          <div className="flex items-center gap-3">
 
-    <h1 className="mt-8 text-5xl sm:text-7xl font-black tracking-tight leading-[0.95]">
-      Faites exploser
-      <span className="block text-gradient mt-2">
-        votre audience
-      </span>
-    </h1>
+            <div className="h-12 w-12 rounded-2xl bg-cyan-500/20 flex items-center justify-center border border-cyan-400/20">
 
-    <p className="mt-5 text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-      Likes • Followers • Vues • Partages premium.  
-      Livraison rapide avec support instantané WhatsApp.
-    </p>
+              <Zap className="h-6 w-6 text-cyan-400" />
 
-    <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            </div>
 
-      <Button
-        asChild
-        size="lg"
-        className="gradient-primary glow text-primary-foreground rounded-2xl px-8 h-12 text-base font-bold"
-      >
-        <a href="#services">
-          Voir les services
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </a>
-      </Button>
+            <div>
 
-      {user ? (
-        <Button
-          asChild
-          size="lg"
-          variant="outline"
-          className="glass border-glow rounded-2xl px-8 h-12"
-        >
-          <Link to="/dashboard">
-            <LayoutDashboard className="mr-2 h-5 w-5" />
-            Dashboard
-          </Link>
-        </Button>
-      ) : (
-        <Button
-          asChild
-          size="lg"
-          variant="outline"
-          className="glass border-glow rounded-2xl px-8 h-12"
-        >
-          <Link to="/auth">
-            <Rocket className="mr-2 h-5 w-5" />
-            Créer un compte
-          </Link>
-        </Button>
-      )}
+              <h1 className="text-xl font-black">
+                Boost-by Ecr_aaM
+              </h1>
 
-    </div>
+              <p className="text-xs text-gray-400">
+                Boost premium Madagascar
+              </p>
 
-    <div className="mt-10 grid grid-cols-3 gap-3 max-w-2xl mx-auto">
+            </div>
 
-      <div className="glass rounded-2xl p-4 hover-lift">
-        <div className="text-2xl font-black text-gradient">
-          24/7
-        </div>
-        <div className="text-xs text-muted-foreground mt-1">
-          Disponible
-        </div>
-      </div>
-
-      <div className="glass rounded-2xl p-4 hover-lift">
-        <div className="text-2xl font-black text-gradient">
-          +10K
-        </div>
-        <div className="text-xs text-muted-foreground mt-1">
-          Clients satisfaits
-        </div>
-      </div>
-
-      <div className="glass rounded-2xl p-4 hover-lift">
-        <div className="text-2xl font-black text-gradient">
-          ⚡
-        </div>
-        <div className="text-xs text-muted-foreground mt-1">
-          Livraison rapide
-        </div>
-      </div>
-
-    </div>
-
-    <div className="mt-8 flex items-center justify-center gap-5 text-xs text-muted-foreground flex-wrap">
-      <span className="inline-flex items-center gap-1.5">
-        <ShieldCheck className="h-4 w-4 text-green-400" />
-        Paiement sécurisé
-      </span>
-
-      <span className="inline-flex items-center gap-1.5">
-        <Sparkles className="h-4 w-4 text-cyan-400" />
-        Qualité premium
-      </span>
-
-      <span className="inline-flex items-center gap-1.5">
-        <MessageCircle className="h-4 w-4 text-primary" />
-        Support WhatsApp
-      </span>
-    </div>
-
-  </div>
-</section>
-      {/* Data saver */}
-      <div className="mx-auto max-w-6xl px-4">
-        <div className="glass rounded-xl px-4 py-2.5 flex items-center justify-between text-xs">
-          <Label htmlFor="ds" className="cursor-pointer">⚡ Mode économie de données</Label>
-          <Switch id="ds" checked={dataSaver} onCheckedChange={setDataSaver} />
-        </div>
-      </div>
-
-      {/* Services */}
-      <section id="services" className="mx-auto max-w-6xl px-4 py-8">
-        <div className="flex items-end justify-between mb-4">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight">Nos services</h2>
-            <p className="text-xs text-muted-foreground">Choisissez une catégorie ci-dessous</p>
           </div>
+
+          <button className="h-12 w-12 rounded-2xl bg-cyan-400 text-black flex items-center justify-center">
+
+            <Menu className="h-6 w-6" />
+
+          </button>
+
         </div>
 
-        <Tabs defaultValue="facebook">
-          <TabsList className="glass border-border/60 w-full grid grid-cols-3 mb-4 h-11">
-            <TabsTrigger value="facebook" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground rounded-lg text-xs sm:text-sm">Facebook</TabsTrigger>
-            <TabsTrigger value="tiktok" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground rounded-lg text-xs sm:text-sm">TikTok</TabsTrigger>
-            <TabsTrigger value="instagram" className="data-[state=active]:gradient-primary data-[state=active]:text-primary-foreground rounded-lg text-xs sm:text-sm">Instagram</TabsTrigger>
-          </TabsList>
+        <div className="px-4 pb-4 flex items-center gap-3">
 
-          <TabsContent value="facebook" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 auto-rows-fr">
-            {services === null
-              ? Array.from({ length: 4 }).map((_, i) => <div key={i} className="skeleton h-44" />)
-              : fb.map((s) => <ServiceCard key={s.id} s={s} />)}
-          </TabsContent>
-          <TabsContent value="tiktok" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 auto-rows-fr">
-            {services === null
-              ? Array.from({ length: 3 }).map((_, i) => <div key={i} className="skeleton h-44" />)
-              : tt.map((s) => <ServiceCard key={s.id} s={s} />)}
-          </TabsContent>
-          <TabsContent value="instagram" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 auto-rows-fr">
-            {services === null
-              ? Array.from({ length: 1 }).map((_, i) => <div key={i} className="skeleton h-44" />)
-              : ig.map((s) => <ServiceCard key={s.id} s={s} />)}
-          </TabsContent>
-        </Tabs>
+          <div className="flex-1 rounded-2xl border border-cyan-400/20 bg-cyan-500/10 p-3">
+
+            <div className="text-xs text-gray-400">
+              Solde
+            </div>
+
+            <div className="mt-1 text-lg font-black text-cyan-400">
+              0 Ar
+            </div>
+
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 flex items-center gap-2">
+
+            <Clock3 className="h-5 w-5 text-cyan-400" />
+
+            <span className="font-bold">
+              {time}
+            </span>
+
+          </div>
+
+        </div>
+
+      </header>
+
+      {/* ANNOUNCE */}
+
+      <section className="px-4 pt-5">
+
+        <div
+          className="
+          relative
+          overflow-hidden
+          rounded-[30px]
+          border
+          border-cyan-400/20
+          p-6
+          bg-gradient-to-br
+          from-cyan-500/20
+          via-violet-500/20
+          to-blue-500/20
+        "
+        >
+
+          <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-cyan-400/20 blur-3xl" />
+
+          <div className="relative z-10">
+
+            <div className="inline-flex items-center gap-2 rounded-full bg-black/30 px-3 py-1 text-xs border border-white/10">
+
+              <Sparkles className="h-4 w-4 text-yellow-400" />
+
+              Premium 24/7
+
+            </div>
+
+            <h2 className="mt-5 text-3xl font-black leading-tight">
+
+              Faites exploser
+              <span className="block text-cyan-400">
+                votre audience
+              </span>
+
+            </h2>
+
+            <p className="mt-4 text-sm text-gray-300 leading-relaxed">
+
+              Likes • Followers • Vues • Réactions premium.
+              Livraison rapide avec support WhatsApp instantané.
+
+            </p>
+
+            <div className="mt-6 flex gap-3">
+
+              <Link
+                to="/auth"
+                className="
+                flex-1
+                rounded-2xl
+                bg-cyan-400
+                py-3
+                text-center
+                font-black
+                text-black
+              "
+              >
+                Commencer
+              </Link>
+
+              <Link
+                to="/recharge"
+                className="
+                flex-1
+                rounded-2xl
+                border
+                border-white/10
+                bg-white/5
+                py-3
+                text-center
+                font-bold
+              "
+              >
+                Recharge
+              </Link>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border/60 mt-8 glass">
-        <div className="mx-auto max-w-6xl px-4 py-8 grid sm:grid-cols-3 gap-6">
+      {/* SERVICES */}
+
+      <section className="px-4 pt-8">
+
+        <div className="flex items-center justify-between">
+
           <div>
-            <div className="text-lg font-bold"><span className="text-gradient">ẞoost</span>-by Ecr_aaM</div>
-            <p className="text-xs text-muted-foreground mt-1">⚡ Site dispo 24h/24 • 7j/7</p>
-            <p className="text-xs text-muted-foreground mt-3">© 2026 — Tous droits réservés</p>
+
+            <div className="text-xs uppercase text-gray-500">
+              Choisissez
+            </div>
+
+            <h3 className="text-2xl font-black mt-1">
+              Nos services
+            </h3>
+
           </div>
-          <div>
-            <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Liens rapides</div>
-            <ul className="text-sm space-y-1.5">
-              <li><Link to="/" className="hover:text-accent">Accueil</Link></li>
-              {user ? (
-                <li><Link to="/dashboard" className="hover:text-accent">Mon compte</Link></li>
-              ) : (
-                <li><Link to="/auth" className="hover:text-accent">Connexion</Link></li>
-              )}
-              <li><Link to="/recharge" className="hover:text-accent">Recharger</Link></li>
-            </ul>
+
+          <div className="rounded-full bg-cyan-400/10 border border-cyan-400/20 px-4 py-2 text-xs font-bold text-cyan-400">
+
+            Premium
+
           </div>
-          <div>
-            <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Support · {WHATSAPP_NUMBER}</div>
-            <a href={waLink("Bonjour, j'ai une question")} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm hover:text-accent">
-              <MessageCircle className="h-4 w-4" /> WhatsApp / SMS
-            </a>
-          </div>
+
         </div>
-      </footer>
+
+        {/* TABS */}
+
+        <div className="mt-5 grid grid-cols-3 gap-3">
+
+          <button className="rounded-2xl bg-cyan-400 text-black py-4 font-black">
+            Facebook
+          </button>
+
+          <button className="rounded-2xl bg-white/5 border border-white/10 py-4 font-bold text-gray-400">
+            TikTok
+          </button>
+
+          <button className="rounded-2xl bg-white/5 border border-white/10 py-4 font-bold text-gray-400">
+            Instagram
+          </button>
+
+        </div>
+
+        {/* CARDS */}
+
+        <div className="grid grid-cols-2 gap-4 mt-6 pb-24">
+
+          {/* CARD */}
+
+          <div className="rounded-[28px] border border-white/10 bg-[#111827] p-5">
+
+            <div className="h-14 w-14 rounded-2xl bg-pink-500/20 flex items-center justify-center">
+
+              <Flame className="h-7 w-7 text-pink-400" />
+
+            </div>
+
+            <h4 className="mt-5 text-xl font-black leading-tight">
+
+              Boost Réaction
+
+            </h4>
+
+            <p className="mt-2 text-sm text-gray-400">
+
+              Likes et réactions premium Facebook
+
+            </p>
+
+            <div className="mt-5 text-3xl font-black text-cyan-400">
+
+              2 000 Ar
+
+            </div>
+
+            <div className="text-sm text-gray-500">
+
+              /1000
+
+            </div>
+
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-green-500/10 border border-green-500/20 px-3 py-1 text-xs text-green-400">
+
+              <ShieldCheck className="h-3 w-3" />
+
+              Sécurisé
+
+            </div>
+
+          </div>
+
+          {/* CARD */}
+
+          <div className="rounded-[28px] border border-white/10 bg-[#111827] p-5">
+
+            <div className="h-14 w-14 rounded-2xl bg-cyan-500/20 flex items-center justify-center">
+
+              <Zap className="h-7 w-7 text-cyan-400" />
+
+            </div>
+
+            <h4 className="mt-5 text-xl font-black leading-tight">
+
+              Followers TikTok
+
+            </h4>
+
+            <p className="mt-2 text-sm text-gray-400">
+
+              Followers rapides haute qualité
+
+            </p>
+
+            <div className="mt-5 text-3xl font-black text-cyan-400">
+
+              4 500 Ar
+
+            </div>
+
+            <div className="text-sm text-gray-500">
+
+              /1000
+
+            </div>
+
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 text-xs text-cyan-400">
+
+              FAST
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* FLOATING BUTTON */}
+
+      <a
+        href="https://wa.me/261347856539"
+        target="_blank"
+        className="
+        fixed
+        bottom-5
+        right-5
+        h-16
+        w-16
+        rounded-full
+        bg-cyan-400
+        text-black
+        flex
+        items-center
+        justify-center
+        shadow-[0_0_40px_rgba(0,255,255,0.5)]
+      "
+      >
+
+        <MessageCircle className="h-8 w-8" />
+
+      </a>
+
     </div>
   );
-}
+        }
