@@ -54,6 +54,14 @@ function Index() {
       <AnnouncementBar />
 
       <main className="mx-auto max-w-6xl px-3 pt-4 space-y-4 fade-in">
+        {/* Community banner — Malagasy */}
+        <section className="rounded-2xl glass-strong border border-primary/20 px-4 py-3 glow-soft text-center">
+          <div className="text-[10px] uppercase tracking-wider text-accent font-bold">Vondrom-piaraha-monina</div>
+          <div className="text-sm font-black mt-0.5">
+            Efa mahery ny <span className="text-gradient">{stats.users.toLocaleString("fr-FR")}</span> olona mampiasa ity plateforme ity
+          </div>
+        </section>
+
         {/* Stats */}
         <section className="grid grid-cols-2 gap-3">
           <StatPill icon={Users} label="Clients actifs" value={stats.users.toLocaleString("fr-FR")} accent />
