@@ -38,7 +38,7 @@ export function ServiceCard({ s }: { s: Service }) {
     <Link
       to="/order/$serviceId"
       params={{ serviceId: s.id }}
-      className="group relative h-full flex flex-col overflow-hidden rounded-3xl glass border border-white/10 p-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-[0_0_24px_oklch(0.78_0.17_65/0.25)] active:scale-[0.98]"
+      className="group relative h-full flex flex-col overflow-hidden rounded-3xl glass border border-white/10 p-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-[0_0_24px_oklch(0.78_0.17_65_/_0.25)] active:scale-[0.98]"
     >
       <div className={`pointer-events-none absolute -top-12 -right-12 h-28 w-28 rounded-full bg-gradient-to-br ${PLATFORM_GRADIENT[s.platform]} blur-2xl opacity-60 group-hover:opacity-100 transition`} />
 
