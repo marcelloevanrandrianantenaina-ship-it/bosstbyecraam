@@ -1,5 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Clock, Flame, Sparkles, Zap, ArrowRight, ShieldCheck, Crown } from "lucide-react";
+import {
+  Clock, Flame, Sparkles, Zap, ArrowRight, ShieldCheck, Crown,
+  Heart, Eye, Users, MessageCircle, Share2, Play, UserPlus, ThumbsUp,
+  Facebook, Instagram, Music2,
+} from "lucide-react";
 import { formatPrice } from "@/lib/constants";
 
 export type Service = {
@@ -18,10 +22,10 @@ const BADGES: Record<string, { label: string; icon: any; cls: string }> = {
   fast: { label: "PROMO", icon: Flame,    cls: "bg-orange-500/15 text-orange-300 border-orange-400/30" },
 };
 
-const PLATFORM_ICON: Record<string, string> = {
-  facebook: "f",
-  tiktok: "♪",
-  instagram: "◉",
+const PLATFORM_ICON: Record<string, any> = {
+  facebook: Facebook,
+  tiktok: Music2,
+  instagram: Instagram,
 };
 
 const PLATFORM_GRADIENT: Record<string, string> = {
@@ -30,9 +34,25 @@ const PLATFORM_GRADIENT: Record<string, string> = {
   instagram: "from-fuchsia-400/25 to-orange-400/10",
 };
 
+/** Pick a service icon from the service name (FR/MG keywords). */
+function pickServiceIcon(name: string) {
+  const n = name.toLowerCase();
+  if (/(follower|abonn|fidy)/.test(n)) return UserPlus;
+  if (/(comment|commentaire|hevitra)/.test(n)) return MessageCircle;
+  if (/(vue|view|hijery)/.test(n)) return Eye;
+  if (/(partage|share)/.test(n)) return Share2;
+  if (/(play|écoute|stream)/.test(n)) return Play;
+  if (/(like|j'aime|tia)/.test(n)) return ThumbsUp;
+  if (/(react|réaction|reaction)/.test(n)) return Heart;
+  if (/(membre|member|group)/.test(n)) return Users;
+  return Sparkles;
+}
+
 export function ServiceCard({ s }: { s: Service }) {
   const B = s.badge && s.badge !== "none" ? BADGES[s.badge] : null;
   const time = s.estimated_time?.trim() || "1h";
+  const PIcon = PLATFORM_ICON[s.platform] ?? Sparkles;
+  const SIcon = pickServiceIcon(s.name);
 
   return (
     <Link
@@ -43,8 +63,13 @@ export function ServiceCard({ s }: { s: Service }) {
       <div className={`pointer-events-none absolute -top-12 -right-12 h-28 w-28 rounded-full bg-gradient-to-br ${PLATFORM_GRADIENT[s.platform]} blur-2xl opacity-60 group-hover:opacity-100 transition`} />
 
       <div className="relative flex items-start justify-between gap-2">
-        <div className="h-9 w-9 rounded-xl gradient-primary grid place-items-center glow-soft font-black text-primary-foreground text-sm">
-          {PLATFORM_ICON[s.platform]}
+        <div className="relative">
+          <div className="h-10 w-10 rounded-2xl gradient-primary grid place-items-center glow-soft text-primary-foreground">
+            <SIcon className="h-5 w-5" />
+          </div>
+          <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-background border border-white/15 grid place-items-center">
+            <PIcon className="h-3 w-3 text-foreground" />
+          </div>
         </div>
         {B && (
           <span className={`${B.cls} text-[9px] font-black px-2 py-0.5 rounded-full border inline-flex items-center gap-1`}>
