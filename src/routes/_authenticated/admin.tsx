@@ -245,53 +245,126 @@ function OrdersAdmin() {
 /* ====== RECHARGES ADMIN ====== */
 function RechargesAdmin() {
   const [rows, setRows] = useState<any[] | null>(null);
+  const [busy, setBusy] = useState<Record<string, boolean>>({});
+  const [tab, setTab] = useState<"pending" | "history">("pending");
+
   async function load() {
-    const { data } = await supabase.from("recharges").select("*, profiles!recharges_user_id_fkey(client_id, full_name, balance, id)").order("created_at", { ascending: false }).limit(100);
+    const { data } = await supabase
+      .from("recharges")
+      .select("*, profiles!recharges_user_id_fkey(client_id, full_name, balance, id)")
+      .order("created_at", { ascending: false })
+      .limit(200);
     setRows(data ?? []);
   }
   useEffect(() => { load(); }, []);
+
   async function approve(r: any) {
-    const newBalance = Number(r.profiles?.balance ?? 0) + Number(r.amount);
-    const { error: e1 } = await supabase.from("profiles").update({ balance: newBalance }).eq("id", r.user_id);
-    if (e1) return toast.error(e1.message);
-    const { error: e2 } = await supabase.from("recharges").update({ status: "approved", processed_at: new Date().toISOString() }).eq("id", r.id);
-    if (e2) return toast.error(e2.message);
-    await supabase.from("notifications").insert({ user_id: r.user_id, title: "Recharge approuvée", body: `+${formatPrice(r.amount)} crédités`, type: "recharge" });
-    toast.success("Recharge approuvée"); load();
+    if (busy[r.id] || r.status !== "pending") return;
+    setBusy((b) => ({ ...b, [r.id]: true }));
+    // Optimistic lock: only update if still pending
+    const { data, error } = await supabase.rpc("approve_recharge", { _recharge_id: r.id });
+    setBusy((b) => ({ ...b, [r.id]: false }));
+    if (error) return toast.error(error.message);
+    const res = Array.isArray(data) ? data[0] : data;
+    if (!res?.ok) {
+      toast.error(res?.message === "forbidden" ? "Action non autorisée"
+        : res?.message?.startsWith("already_") ? "Déjà traitée" : "Erreur");
+      load();
+      return;
+    }
+    toast.success(`✅ Validée · +${formatPrice(r.amount)}`);
+    load();
   }
+
   async function reject(r: any) {
-    await supabase.from("recharges").update({ status: "rejected", processed_at: new Date().toISOString() }).eq("id", r.id);
-    await supabase.from("notifications").insert({ user_id: r.user_id, title: "Recharge rejetée", body: `${formatPrice(r.amount)}`, type: "recharge" });
-    toast.success("Rejetée"); load();
+    if (busy[r.id] || r.status !== "pending") return;
+    setBusy((b) => ({ ...b, [r.id]: true }));
+    const { data, error } = await supabase.rpc("reject_recharge", { _recharge_id: r.id });
+    setBusy((b) => ({ ...b, [r.id]: false }));
+    if (error) return toast.error(error.message);
+    const res = Array.isArray(data) ? data[0] : data;
+    if (!res?.ok) { toast.error("Action impossible"); load(); return; }
+    toast.success("Rejetée");
+    load();
   }
+
+  const pending = (rows ?? []).filter((r) => r.status === "pending");
+  const history = (rows ?? []).filter((r) => r.status !== "pending");
+  const list = tab === "pending" ? pending : history;
+
   return (
-    <div className="space-y-2">
-      {rows === null && Array.from({length:3}).map((_,i)=><div key={i} className="skeleton h-16"/>)}
-      {rows?.length === 0 && <p className="text-sm text-muted-foreground text-center py-8">Aucune recharge</p>}
-      {rows?.map((r) => (
-        <div key={r.id} className="glass rounded-xl p-3 flex items-center justify-between gap-2 flex-wrap">
-          <div className="min-w-0">
-            <div className="font-semibold">{formatPrice(r.amount)}</div>
-            <div className="text-[11px] text-muted-foreground">
-              {r.profiles?.client_id} · {r.profiles?.full_name ?? "—"} · {new Date(r.created_at).toLocaleString("fr-FR")}
-            </div>
-            {(r.reference || r.sender_number) && (
-              <div className="text-[11px] text-accent mt-0.5">
-                {r.sender_number && <>📱 {r.sender_number}</>}
-                {r.reference && <> · 🔖 {r.reference}</>}
+    <div className="space-y-3">
+      <div className="inline-flex glass rounded-xl p-1 border border-white/10">
+        <button
+          onClick={() => setTab("pending")}
+          className={`px-3 h-8 rounded-lg text-xs font-bold ${tab==="pending" ? "gradient-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >En attente {pending.length > 0 && <span className="ml-1 px-1.5 rounded bg-white/20">{pending.length}</span>}</button>
+        <button
+          onClick={() => setTab("history")}
+          className={`px-3 h-8 rounded-lg text-xs font-bold ${tab==="history" ? "gradient-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >Historique</button>
+      </div>
+
+      <div className="space-y-2">
+        {rows === null && Array.from({length:3}).map((_,i)=><div key={i} className="skeleton h-16"/>)}
+        {rows !== null && list.length === 0 && (
+          <p className="text-sm text-muted-foreground text-center py-8">
+            {tab === "pending" ? "Aucune recharge en attente" : "Historique vide"}
+          </p>
+        )}
+        {list.map((r) => {
+          const isPending = r.status === "pending";
+          const isApproved = r.status === "approved";
+          return (
+            <div key={r.id} className="glass rounded-xl p-3 flex items-center justify-between gap-2 flex-wrap">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <div className="font-semibold">{formatPrice(r.amount)}</div>
+                  {isApproved && (
+                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-[oklch(0.72_0.18_155_/_0.2)] text-[oklch(0.72_0.18_155)] border border-[oklch(0.72_0.18_155_/_0.4)]">
+                      ✓ VALIDÉ
+                    </span>
+                  )}
+                  {r.status === "rejected" && (
+                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-destructive/20 text-destructive border border-destructive/40">
+                      ✗ REJETÉ
+                    </span>
+                  )}
+                </div>
+                <div className="text-[11px] text-muted-foreground">
+                  {r.profiles?.client_id} · {r.profiles?.full_name ?? "—"} · {new Date(r.created_at).toLocaleString("fr-FR")}
+                </div>
+                {(r.reference || r.sender_number) && (
+                  <div className="text-[11px] text-accent mt-0.5">
+                    {r.sender_number && <>📱 {r.sender_number}</>}
+                    {r.reference && <> · 🔖 {r.reference}</>}
+                  </div>
+                )}
+                {r.processed_at && !isPending && (
+                  <div className="text-[10px] text-muted-foreground mt-0.5">
+                    Traitée le {new Date(r.processed_at).toLocaleString("fr-FR")}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          {r.status === "pending" ? (
-            <div className="flex gap-1.5">
-              <Button size="sm" onClick={() => approve(r)} className="bg-[oklch(0.72_0.18_155)] text-[oklch(0.1_0.02_250)] hover:opacity-90"><Check className="h-4 w-4" /></Button>
-              <Button size="sm" variant="destructive" onClick={() => reject(r)}><X className="h-4 w-4" /></Button>
+              {isPending ? (
+                <div className="flex gap-1.5">
+                  <Button
+                    size="sm"
+                    disabled={!!busy[r.id]}
+                    onClick={() => approve(r)}
+                    className="bg-[oklch(0.72_0.18_155)] text-[oklch(0.1_0.02_250)] hover:opacity-90 disabled:opacity-50"
+                  >
+                    {busy[r.id] ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                  </Button>
+                  <Button size="sm" variant="destructive" disabled={!!busy[r.id]} onClick={() => reject(r)}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : null}
             </div>
-          ) : (
-            <span className="text-[10px] uppercase">{r.status}</span>
-          )}
-        </div>
-      ))}
+          );
+        })}
+      </div>
     </div>
   );
 }
