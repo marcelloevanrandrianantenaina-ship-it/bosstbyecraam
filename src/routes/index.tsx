@@ -83,26 +83,35 @@ function Index() {
           </button>
         </section>
 
-        {/* Platform tabs */}
-        <section className="grid grid-cols-3 gap-2">
-          {TABS.map((t) => {
-            const active = platform === t.id;
-            return (
-              <button
-                key={t.id}
-                onClick={() => setPlatform(t.id)}
-                className={[
-                  "h-11 rounded-2xl text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all active:scale-95",
-                  active
-                    ? "gradient-primary text-primary-foreground glow-soft"
-                    : "glass border border-white/10 text-muted-foreground hover:border-accent/30 hover:text-foreground",
-                ].join(" ")}
-              >
-                <t.icon className="h-4 w-4" />{t.label}
-              </button>
-            );
-          })}
+        {/* Platform tabs — floating capsule */}
+        <section className="flex items-center justify-center">
+          <div className="inline-flex items-center gap-2 p-1.5 rounded-full glass-strong border border-white/10 shadow-[0_8px_30px_-12px_oklch(0.78_0.17_65_/_0.35)]">
+            {TABS.map((t) => {
+              const active = platform === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setPlatform(t.id)}
+                  aria-pressed={active}
+                  className={[
+                    "relative inline-flex items-center gap-1.5 h-10 px-4 rounded-full text-xs font-bold transition-all duration-300 ease-out",
+                    "active:scale-95",
+                    active
+                      ? "gradient-primary text-primary-foreground scale-105 shadow-[0_0_24px_-4px_oklch(0.78_0.17_65_/_0.7)]"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/5",
+                  ].join(" ")}
+                >
+                  <t.icon className={`h-4 w-4 transition-transform ${active ? "scale-110" : ""}`} />
+                  <span>{t.label}</span>
+                  {active && (
+                    <span className="absolute inset-0 rounded-full ring-1 ring-primary/40 pointer-events-none" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </section>
+
 
         {/* Search */}
         <div className="relative">
