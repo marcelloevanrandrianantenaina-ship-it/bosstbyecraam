@@ -279,7 +279,7 @@ function RechargesAdmin() {
   async function reject(r: any) {
     if (busy[r.id] || r.status !== "pending") return;
     setBusy((b) => ({ ...b, [r.id]: true }));
-    const { data, error } = await supabase.rpc("reject_recharge", { _recharge_id: r.id, _note: null });
+    const { data, error } = await supabase.rpc("reject_recharge", { _recharge_id: r.id });
     setBusy((b) => ({ ...b, [r.id]: false }));
     if (error) return toast.error(error.message);
     const res = Array.isArray(data) ? data[0] : data;
