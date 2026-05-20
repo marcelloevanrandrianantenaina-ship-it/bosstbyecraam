@@ -83,33 +83,37 @@ function Index() {
           </button>
         </section>
 
-        {/* Platform tabs — floating capsule */}
-        <section className="flex items-center justify-center">
-          <div className="inline-flex items-center gap-2 p-1.5 rounded-full glass-strong border border-white/10 shadow-[0_8px_30px_-12px_oklch(0.78_0.17_65_/_0.35)]">
-            {TABS.map((t) => {
-              const active = platform === t.id;
-              return (
-                <button
-                  key={t.id}
-                  onClick={() => setPlatform(t.id)}
-                  aria-pressed={active}
+        {/* Platform selector — floating circular buttons */}
+        <section className="flex items-center justify-center gap-5 py-2">
+          {TABS.map((t) => {
+            const active = platform === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setPlatform(t.id)}
+                aria-pressed={active}
+                aria-label={t.label}
+                className="group flex flex-col items-center gap-1.5 focus:outline-none"
+              >
+                <span
                   className={[
-                    "relative inline-flex items-center gap-1.5 h-10 px-4 rounded-full text-xs font-bold transition-all duration-300 ease-out",
-                    "active:scale-95",
+                    "relative grid place-items-center rounded-full transition-all duration-300 ease-out active:scale-95",
                     active
-                      ? "gradient-primary text-primary-foreground scale-105 shadow-[0_0_24px_-4px_oklch(0.78_0.17_65_/_0.7)]"
-                      : "text-muted-foreground hover:text-foreground hover:bg-white/5",
+                      ? "h-16 w-16 gradient-primary text-primary-foreground scale-110 shadow-[0_0_32px_-4px_oklch(0.78_0.17_65_/_0.85)] ring-2 ring-primary/50"
+                      : "h-14 w-14 glass-strong border border-white/10 text-muted-foreground group-hover:text-foreground group-hover:border-primary/30",
                   ].join(" ")}
                 >
-                  <t.icon className={`h-4 w-4 transition-transform ${active ? "scale-110" : ""}`} />
-                  <span>{t.label}</span>
+                  <t.icon className={`transition-all ${active ? "h-7 w-7" : "h-6 w-6"}`} />
                   {active && (
-                    <span className="absolute inset-0 rounded-full ring-1 ring-primary/40 pointer-events-none" />
+                    <span className="absolute inset-0 rounded-full animate-pulse ring-1 ring-primary/40 pointer-events-none" />
                   )}
-                </button>
-              );
-            })}
-          </div>
+                </span>
+                <span className={`text-[10px] font-bold tracking-wide transition-colors ${active ? "text-primary" : "text-muted-foreground"}`}>
+                  {t.label}
+                </span>
+              </button>
+            );
+          })}
         </section>
 
 
