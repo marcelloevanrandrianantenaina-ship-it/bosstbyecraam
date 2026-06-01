@@ -55,7 +55,7 @@ function TransferPage() {
     const { data, error } = await supabase.rpc("transfer_balance", {
       _recipient_client_id: clientId.trim().toUpperCase(),
       _amount: amt,
-      _note: note.trim() || null,
+      _note: note.trim() || undefined,
     });
     setBusy(false);
 
