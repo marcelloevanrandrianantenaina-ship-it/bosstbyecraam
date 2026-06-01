@@ -16,16 +16,21 @@ import { formatPrice } from "@/lib/constants";
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw redirect({ to: "/auth" });
+    if (!user) throw redirect({ to: "/admin/login" });
     const { data: roles } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", user.id);
     const isAdmin = (roles ?? []).some((r: any) => r.role === "admin" || r.role === "sub_admin");
     if (!isAdmin) throw redirect({ to: "/dashboard" });
+    // Second-layer gate: must have passed the 3-password check in this session
+    if (typeof window !== "undefined" && sessionStorage.getItem("admin_gate_passed") !== "1") {
+      throw redirect({ to: "/admin/login" });
+    }
   },
   component: AdminPage,
 });
+
 
 type SectionId = "overview" | "orders" | "recharges" | "services" | "clients" | "content";
 

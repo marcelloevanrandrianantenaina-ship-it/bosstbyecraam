@@ -80,6 +80,36 @@ export type Database = {
         }
         Relationships: []
       }
+      balance_transfers: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          note: string | null
+          recipient_client_id: string
+          recipient_id: string
+          sender_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          recipient_client_id: string
+          recipient_id: string
+          sender_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          recipient_client_id?: string
+          recipient_id?: string
+          sender_id?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           body: string | null
@@ -362,6 +392,14 @@ export type Database = {
         Args: { _note?: string; _recharge_id: string }
         Returns: {
           message: string
+          ok: boolean
+        }[]
+      }
+      transfer_balance: {
+        Args: { _amount: number; _note?: string; _recipient_client_id: string }
+        Returns: {
+          message: string
+          new_balance: number
           ok: boolean
         }[]
       }

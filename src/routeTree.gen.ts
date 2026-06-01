@@ -13,7 +13,10 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AuthenticatedTransferRouteImport } from './routes/_authenticated/transfer'
 import { Route as AuthenticatedRechargeRouteImport } from './routes/_authenticated/recharge'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedOrdersRouteImport } from './routes/_authenticated/orders'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -38,9 +41,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedTransferRoute = AuthenticatedTransferRouteImport.update({
+  id: '/transfer',
+  path: '/transfer',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedRechargeRoute = AuthenticatedRechargeRouteImport.update({
   id: '/recharge',
   path: '/recharge',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedOrdersRoute = AuthenticatedOrdersRouteImport.update({
@@ -72,7 +90,10 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/orders': typeof AuthenticatedOrdersRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/recharge': typeof AuthenticatedRechargeRoute
+  '/transfer': typeof AuthenticatedTransferRoute
+  '/admin/login': typeof AdminLoginRoute
   '/order/$serviceId': typeof AuthenticatedOrderServiceIdRoute
 }
 export interface FileRoutesByTo {
@@ -82,7 +103,10 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/orders': typeof AuthenticatedOrdersRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/recharge': typeof AuthenticatedRechargeRoute
+  '/transfer': typeof AuthenticatedTransferRoute
+  '/admin/login': typeof AdminLoginRoute
   '/order/$serviceId': typeof AuthenticatedOrderServiceIdRoute
 }
 export interface FileRoutesById {
@@ -94,7 +118,10 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/orders': typeof AuthenticatedOrdersRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/recharge': typeof AuthenticatedRechargeRoute
+  '/_authenticated/transfer': typeof AuthenticatedTransferRoute
+  '/admin/login': typeof AdminLoginRoute
   '/_authenticated/order/$serviceId': typeof AuthenticatedOrderServiceIdRoute
 }
 export interface FileRouteTypes {
@@ -106,7 +133,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/orders'
+    | '/profile'
     | '/recharge'
+    | '/transfer'
+    | '/admin/login'
     | '/order/$serviceId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -116,7 +146,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/orders'
+    | '/profile'
     | '/recharge'
+    | '/transfer'
+    | '/admin/login'
     | '/order/$serviceId'
   id:
     | '__root__'
@@ -127,7 +160,10 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/orders'
+    | '/_authenticated/profile'
     | '/_authenticated/recharge'
+    | '/_authenticated/transfer'
+    | '/admin/login'
     | '/_authenticated/order/$serviceId'
   fileRoutesById: FileRoutesById
 }
@@ -136,6 +172,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  AdminLoginRoute: typeof AdminLoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -168,11 +205,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/transfer': {
+      id: '/_authenticated/transfer'
+      path: '/transfer'
+      fullPath: '/transfer'
+      preLoaderRoute: typeof AuthenticatedTransferRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/recharge': {
       id: '/_authenticated/recharge'
       path: '/recharge'
       fullPath: '/recharge'
       preLoaderRoute: typeof AuthenticatedRechargeRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/orders': {
@@ -210,7 +268,9 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedRechargeRoute: typeof AuthenticatedRechargeRoute
+  AuthenticatedTransferRoute: typeof AuthenticatedTransferRoute
   AuthenticatedOrderServiceIdRoute: typeof AuthenticatedOrderServiceIdRoute
 }
 
@@ -218,7 +278,9 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedOrdersRoute: AuthenticatedOrdersRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedRechargeRoute: AuthenticatedRechargeRoute,
+  AuthenticatedTransferRoute: AuthenticatedTransferRoute,
   AuthenticatedOrderServiceIdRoute: AuthenticatedOrderServiceIdRoute,
 }
 
@@ -231,17 +293,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  AdminLoginRoute: AdminLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
