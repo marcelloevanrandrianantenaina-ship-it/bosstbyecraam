@@ -2,8 +2,9 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   LogIn, LayoutDashboard, Wallet, Zap, LogOut, Shield, UserCircle2,
-  Menu, ShoppingBag, MessageCircle, BookOpen, History, Gauge, X, Crown,
+  Menu, ShoppingBag, MessageCircle, BookOpen, History, Gauge, X, Crown, Send,
 } from "lucide-react";
+
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -73,9 +74,10 @@ export function AppHeader() {
           )}
           {isAdmin && (
             <Button asChild variant="ghost" size="icon" className="h-8 w-8" aria-label="Admin">
-              <Link to="/admin"><Shield className="h-4 w-4 text-primary" /></Link>
+              <Link to="/admin/login"><Shield className="h-4 w-4 text-primary" /></Link>
             </Button>
           )}
+
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <button
@@ -118,8 +120,10 @@ export function AppHeader() {
                 {user && (
                   <>
                     <MenuLink to="/dashboard" icon={LayoutDashboard} label="Tableau de bord" onClick={close} />
+                    <MenuLink to="/profile" icon={UserCircle2} label="Mon profil" onClick={close} />
                     <MenuLink to="/orders" icon={ShoppingBag} label="Suivi commandes" onClick={close} />
                     <MenuLink to="/recharge" icon={Wallet} label="Recharger compte" onClick={close} />
+                    <MenuLink to="/transfer" icon={Send} label="Transfert de solde" onClick={close} />
                   </>
                 )}
                 <MenuExternal href={`https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, "")}`} icon={MessageCircle} label="Support WhatsApp" badge="24/7" onClick={close} />
@@ -127,6 +131,7 @@ export function AppHeader() {
                 <MenuButton icon={History} label="Historique" hint={user ? "" : "Connexion requise"} onClick={close} />
                 <MenuButton icon={Gauge} label="Mode économie données" hint="Auto" onClick={close} />
               </nav>
+
 
               <div className="p-3 mt-2 border-t border-border/60">
                 {user ? (

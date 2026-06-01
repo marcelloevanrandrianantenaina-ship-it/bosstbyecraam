@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { RefreshCcw, Users, ShoppingBag, Search, Facebook, Instagram, Music2 } from "lucide-react";
 
@@ -10,8 +10,13 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: async () => {
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) throw redirect({ to: "/auth" });
+  },
   component: Index,
 });
+
 
 type Platform = "facebook" | "tiktok" | "instagram";
 
