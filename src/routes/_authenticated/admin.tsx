@@ -215,8 +215,13 @@ function OrdersAdmin() {
   const [rows, setRows] = useState<any[] | null>(null);
   const [q, setQ] = useState("");
   async function load() {
-    const { data } = await supabase.from("orders").select("*, profiles!orders_user_id_fkey(client_id, full_name)").order("created_at", { ascending: false }).limit(200);
-    setRows(data ?? []);
+    const { data: orders } = await supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(200);
+    const ids = Array.from(new Set((orders ?? []).map((o: any) => o.user_id)));
+    const { data: profs } = ids.length
+      ? await supabase.from("profiles").select("id, client_id, full_name").in("id", ids)
+      : { data: [] as any[] };
+    const map = new Map((profs ?? []).map((p: any) => [p.id, p]));
+    setRows((orders ?? []).map((o: any) => ({ ...o, profiles: map.get(o.user_id) ?? null })));
   }
   useEffect(() => { load(); }, []);
   async function setStatus(id: string, status: string) {
@@ -264,12 +269,17 @@ function RechargesAdmin() {
   const [tab, setTab] = useState<"pending" | "history">("pending");
 
   async function load() {
-    const { data } = await supabase
+    const { data: recs } = await supabase
       .from("recharges")
-      .select("*, profiles!recharges_user_id_fkey(client_id, full_name, balance, id)")
+      .select("*")
       .order("created_at", { ascending: false })
       .limit(200);
-    setRows(data ?? []);
+    const ids = Array.from(new Set((recs ?? []).map((r: any) => r.user_id)));
+    const { data: profs } = ids.length
+      ? await supabase.from("profiles").select("id, client_id, full_name, balance").in("id", ids)
+      : { data: [] as any[] };
+    const map = new Map((profs ?? []).map((p: any) => [p.id, p]));
+    setRows((recs ?? []).map((r: any) => ({ ...r, profiles: map.get(r.user_id) ?? null })));
   }
   useEffect(() => { load(); }, []);
 
