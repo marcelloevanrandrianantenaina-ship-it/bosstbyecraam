@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2, Wallet, Copy, Check, Phone, User2, Rocket, AlertCircle } from "lucide-react";
-import { formatPrice, MVOLA_NUMBER, MVOLA_ACCOUNT_NAME, MIN_RECHARGE } from "@/lib/constants";
+import { formatPrice } from "@/lib/constants";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 
 export const Route = createFileRoute("/_authenticated/recharge")({
   component: RechargePage,
