@@ -8,6 +8,7 @@ import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { ServiceCard, type Service } from "@/components/ServiceCard";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
