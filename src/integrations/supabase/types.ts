@@ -346,6 +346,69 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          facebook_url: string | null
+          footer_text: string
+          id: number
+          instagram_url: string | null
+          logo_url: string | null
+          min_recharge: number
+          mvola_instructions: string | null
+          mvola_number: string
+          mvola_owner: string
+          primary_color: string
+          site_name: string
+          slogan: string
+          tiktok_url: string | null
+          updated_at: string
+          updated_by: string | null
+          welcome_message: string | null
+          whatsapp_intl: string
+          whatsapp_number: string
+        }
+        Insert: {
+          facebook_url?: string | null
+          footer_text?: string
+          id?: number
+          instagram_url?: string | null
+          logo_url?: string | null
+          min_recharge?: number
+          mvola_instructions?: string | null
+          mvola_number?: string
+          mvola_owner?: string
+          primary_color?: string
+          site_name?: string
+          slogan?: string
+          tiktok_url?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          welcome_message?: string | null
+          whatsapp_intl?: string
+          whatsapp_number?: string
+        }
+        Update: {
+          facebook_url?: string | null
+          footer_text?: string
+          id?: number
+          instagram_url?: string | null
+          logo_url?: string | null
+          min_recharge?: number
+          mvola_instructions?: string | null
+          mvola_number?: string
+          mvola_owner?: string
+          primary_color?: string
+          site_name?: string
+          slogan?: string
+          tiktok_url?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          welcome_message?: string | null
+          whatsapp_intl?: string
+          whatsapp_number?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

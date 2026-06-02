@@ -6,12 +6,14 @@ import {
 } from "lucide-react";
 
 import { useAuth } from "@/hooks/use-auth";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 export function AppHeader() {
   const { user, profile, isAdmin, signOut } = useAuth();
+  const { settings } = useSiteSettings();
+  const waDigits = (settings.whatsapp_intl || settings.whatsapp_number).replace(/[^0-9]/g, "");
   const navigate = useNavigate();
   const [time, setTime] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -36,8 +38,7 @@ export function AppHeader() {
             </div>
             <div className="leading-tight min-w-0 hidden xs:block sm:block">
               <div className="text-[12px] font-black tracking-tight truncate flex items-center gap-1">
-                <span className="text-gradient">Bosst</span>
-                <span className="text-foreground/70 font-medium">by Ecraam</span>
+                <span className="text-gradient">{settings.site_name}</span>
                 <span className="inline-flex items-center gap-0.5 px-1 py-px rounded text-[8px] font-black bg-primary/15 text-primary border border-primary/30">
                   <Crown className="h-2 w-2" />PRO
                 </span>
@@ -94,7 +95,7 @@ export function AppHeader() {
                     <Zap className="h-4 w-4 text-primary-foreground" />
                   </div>
                   <div className="leading-tight">
-                    <div className="text-sm font-black"><span className="text-gradient">Bosst</span> <span className="text-foreground/70">by Ecraam</span></div>
+                    <div className="text-sm font-black text-gradient">{settings.site_name}</div>
                     <div className="text-[10px] text-muted-foreground">Menu principal</div>
                   </div>
                 </div>
@@ -126,7 +127,7 @@ export function AppHeader() {
                     <MenuLink to="/transfer" icon={Send} label="Transfert de solde" onClick={close} />
                   </>
                 )}
-                <MenuExternal href={`https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, "")}`} icon={MessageCircle} label="Support WhatsApp" badge="24/7" onClick={close} />
+                <MenuExternal href={`https://wa.me/${waDigits}`} icon={MessageCircle} label="Support WhatsApp" badge="24/7" onClick={close} />
                 <MenuButton icon={BookOpen} label="Tutoriel" hint="Bientôt" onClick={close} />
                 <MenuButton icon={History} label="Historique" hint={user ? "" : "Connexion requise"} onClick={close} />
                 <MenuButton icon={Gauge} label="Mode économie données" hint="Auto" onClick={close} />

@@ -90,6 +90,14 @@ function AdminPage() {
                 );
               })}
             </nav>
+
+            <Link
+              to="/admin/settings"
+              className="mt-2 flex items-center gap-2 px-3 h-10 rounded-2xl text-xs font-bold border border-accent/30 bg-accent/10 text-accent hover:bg-accent/20 transition"
+            >
+              <Settings2 className="h-4 w-4" />
+              Paramètres du site
+            </Link>
           </div>
 
           <Link to="/dashboard" className="hidden lg:flex mt-3 items-center justify-center text-[11px] text-muted-foreground hover:text-accent transition">

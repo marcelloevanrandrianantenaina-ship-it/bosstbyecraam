@@ -8,6 +8,7 @@ import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { ServiceCard, type Service } from "@/components/ServiceCard";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -28,6 +29,7 @@ const TABS: { id: Platform; label: string; icon: any }[] = [
 
 function Index() {
   const { user } = useAuth();
+  const { settings } = useSiteSettings();
   const [services, setServices] = useState<Service[] | null>(null);
   const [platform, setPlatform] = useState<Platform>("facebook");
   const [q, setQ] = useState("");
@@ -167,7 +169,7 @@ function Index() {
 
         {/* Footer */}
         <footer className="pt-6 pb-2 text-center text-[11px] text-muted-foreground">
-          <div className="font-bold text-foreground/80">ẞoost-by Ecr_aaM © 2026</div>
+          <div className="font-bold text-foreground/80">{settings.footer_text}</div>
           <div className="mt-1">⚡ Service disponible 24h/24</div>
         </footer>
       </main>
