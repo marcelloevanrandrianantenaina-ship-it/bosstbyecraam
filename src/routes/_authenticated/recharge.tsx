@@ -27,6 +27,10 @@ const QUICK = [2000, 5000, 10000, 25000, 50000];
 
 function RechargePage() {
   const { user, profile } = useAuth();
+  const { settings } = useSiteSettings();
+  const MVOLA_NUMBER = settings.mvola_number;
+  const MVOLA_ACCOUNT_NAME = settings.mvola_owner;
+  const MIN_RECHARGE = settings.min_recharge;
   const [amount, setAmount] = useState<string>("");
   const [sender, setSender] = useState<string>("");
   const [reference, setReference] = useState<string>("");
