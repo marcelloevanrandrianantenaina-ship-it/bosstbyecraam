@@ -12,6 +12,8 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export function AppHeader() {
   const { user, profile, isAdmin, signOut } = useAuth();
+  const { settings } = useSiteSettings();
+  const waDigits = (settings.whatsapp_intl || settings.whatsapp_number).replace(/[^0-9]/g, "");
   const navigate = useNavigate();
   const [time, setTime] = useState<string>("");
   const [open, setOpen] = useState(false);
