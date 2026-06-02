@@ -6,9 +6,9 @@ import {
 } from "lucide-react";
 
 import { useAuth } from "@/hooks/use-auth";
+import { useSiteSettings } from "@/hooks/use-site-settings";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 export function AppHeader() {
   const { user, profile, isAdmin, signOut } = useAuth();
