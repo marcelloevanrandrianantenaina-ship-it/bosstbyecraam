@@ -95,7 +95,7 @@ export function AppHeader() {
                     <Zap className="h-4 w-4 text-primary-foreground" />
                   </div>
                   <div className="leading-tight">
-                    <div className="text-sm font-black"><span className="text-gradient">Bosst</span> <span className="text-foreground/70">by Ecraam</span></div>
+                    <div className="text-sm font-black text-gradient">{settings.site_name}</div>
                     <div className="text-[10px] text-muted-foreground">Menu principal</div>
                   </div>
                 </div>
