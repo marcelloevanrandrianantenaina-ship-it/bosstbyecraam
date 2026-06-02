@@ -128,7 +128,7 @@ export function AppHeader() {
                     <MenuLink to="/transfer" icon={Send} label="Transfert de solde" onClick={close} />
                   </>
                 )}
-                <MenuExternal href={`https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, "")}`} icon={MessageCircle} label="Support WhatsApp" badge="24/7" onClick={close} />
+                <MenuExternal href={`https://wa.me/${waDigits}`} icon={MessageCircle} label="Support WhatsApp" badge="24/7" onClick={close} />
                 <MenuButton icon={BookOpen} label="Tutoriel" hint="Bientôt" onClick={close} />
                 <MenuButton icon={History} label="Historique" hint={user ? "" : "Connexion requise"} onClick={close} />
                 <MenuButton icon={Gauge} label="Mode économie données" hint="Auto" onClick={close} />
