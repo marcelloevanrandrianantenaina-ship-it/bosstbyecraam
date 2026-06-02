@@ -38,8 +38,7 @@ export function AppHeader() {
             </div>
             <div className="leading-tight min-w-0 hidden xs:block sm:block">
               <div className="text-[12px] font-black tracking-tight truncate flex items-center gap-1">
-                <span className="text-gradient">Bosst</span>
-                <span className="text-foreground/70 font-medium">by Ecraam</span>
+                <span className="text-gradient">{settings.site_name}</span>
                 <span className="inline-flex items-center gap-0.5 px-1 py-px rounded text-[8px] font-black bg-primary/15 text-primary border border-primary/30">
                   <Crown className="h-2 w-2" />PRO
                 </span>
