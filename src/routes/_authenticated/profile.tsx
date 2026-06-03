@@ -52,21 +52,24 @@ function ProfilePage() {
         <p className="text-xs text-muted-foreground">Gérez vos informations personnelles</p>
       </div>
 
-      <div className="glass-strong rounded-2xl p-5 flex items-center gap-4">
-        <div className="h-16 w-16 rounded-2xl gradient-primary grid place-items-center glow-soft overflow-hidden">
-          {avatarUrl ? (
-            <img src={avatarUrl} alt="" className="h-full w-full object-cover" onError={() => setAvatarUrl("")} />
-          ) : (
-            <UserCircle2 className="h-8 w-8 text-primary-foreground" />
-          )}
+      <div className="glass-strong rounded-3xl p-6 flex flex-col items-center text-center gap-3 glow-soft border border-primary/20">
+        <div className="relative">
+          <div className="h-24 w-24 rounded-full gradient-primary grid place-items-center glow-soft overflow-hidden ring-4 ring-primary/30 shadow-[0_0_32px_-4px_oklch(0.78_0.17_65_/_0.6)]">
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="" className="h-full w-full object-cover" onError={() => setAvatarUrl("")} />
+            ) : (
+              <UserCircle2 className="h-12 w-12 text-primary-foreground" />
+            )}
+          </div>
+          <span className="absolute -bottom-1 right-0 h-6 w-6 rounded-full bg-[oklch(0.72_0.18_155)] border-2 border-background grid place-items-center text-[10px] font-black text-white">✓</span>
         </div>
-        <div className="min-w-0 flex-1">
-          <div className="text-sm font-bold truncate">{profile?.full_name ?? user?.email}</div>
-          <button onClick={copyId} className="mt-0.5 inline-flex items-center gap-1.5 text-[11px] text-accent hover:underline">
+        <div className="min-w-0">
+          <div className="text-base font-black truncate">{profile?.full_name ?? user?.email}</div>
+          <button onClick={copyId} className="mt-1 inline-flex items-center gap-1.5 text-[11px] text-accent hover:underline">
             ID: <span className="font-mono">{profile?.client_id}</span> <Copy className="h-3 w-3" />
           </button>
-          <div className="mt-1 inline-flex items-center gap-1 text-[11px] font-black text-primary">
-            <Wallet className="h-3 w-3" /> {formatPrice(profile?.balance ?? 0)}
+          <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/15 border border-primary/30 text-xs font-black text-primary">
+            <Wallet className="h-3.5 w-3.5" /> {formatPrice(profile?.balance ?? 0)}
           </div>
         </div>
       </div>
