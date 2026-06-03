@@ -480,8 +480,13 @@ function ServicesAdmin() {
               <div><Label>Quantité max</Label><Input type="number" value={editing.max_quantity ?? 100000} onChange={(e) => setEditing({ ...editing, max_quantity: e.target.value })} /></div>
               <div><Label>Délai estimé</Label><Input value={editing.estimated_time ?? "0-1h"} onChange={(e) => setEditing({ ...editing, estimated_time: e.target.value })} /></div>
               <div><Label>Ordre</Label><Input type="number" value={editing.sort_order ?? 0} onChange={(e) => setEditing({ ...editing, sort_order: e.target.value })} /></div>
+              <div><Label>Promo %</Label><Input type="number" min={0} max={90} value={editing.discount_pct ?? 0} onChange={(e) => setEditing({ ...editing, discount_pct: e.target.value })} /></div>
+              <div><Label>Popularité %</Label><Input type="number" min={0} max={100} value={editing.popularity_pct ?? 85} onChange={(e) => setEditing({ ...editing, popularity_pct: e.target.value })} /></div>
               <div className="col-span-2 flex items-center justify-between glass rounded-lg p-2">
                 <Label>Actif</Label><Switch checked={!!editing.is_active} onCheckedChange={(v) => setEditing({ ...editing, is_active: v })} />
+              </div>
+              <div className="col-span-2 flex items-center justify-between glass rounded-lg p-2">
+                <Label>Disponible (sinon "Indisponible")</Label><Switch checked={editing.available !== false} onCheckedChange={(v) => setEditing({ ...editing, available: v })} />
               </div>
             </div>
           )}
