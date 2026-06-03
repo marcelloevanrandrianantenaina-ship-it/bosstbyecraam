@@ -59,17 +59,21 @@ export function useSiteSettings() {
     staleTime: 60_000,
   });
 
-  // Live updates when admin edits
+  // Live updates when admin edits — unique channel name per hook instance
+  // so multiple consumers don't reuse the same subscribed channel.
   useEffect(() => {
+    const channelName = `site_settings_live_${Math.random().toString(36).slice(2)}`;
     const ch = supabase
-      .channel("site_settings_live")
+      .channel(channelName)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "site_settings" },
         () => qc.invalidateQueries({ queryKey: ["site_settings"] }),
       )
       .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    return () => {
+      supabase.removeChannel(ch);
+    };
   }, [qc]);
 
   return { settings: query.data ?? DEFAULTS, isLoading: query.isLoading, refresh: query.refetch };

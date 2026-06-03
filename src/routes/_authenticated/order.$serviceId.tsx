@@ -19,6 +19,7 @@ type Service = {
   name: string; description: string | null;
   price_per_1k: number; min_quantity: number; max_quantity: number;
   estimated_time: string | null; platform: string;
+  available?: boolean | null; is_active?: boolean | null;
 };
 
 function OrderPage() {
@@ -32,7 +33,7 @@ function OrderPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    supabase.from("services").select("id, name, description, price_per_1k, min_quantity, max_quantity, estimated_time, platform")
+    supabase.from("services").select("id, name, description, price_per_1k, min_quantity, max_quantity, estimated_time, platform, available, is_active")
       .eq("id", serviceId).maybeSingle().then(({ data }) => {
         const s = data as Service | null;
         setSvc(s);
@@ -47,10 +48,13 @@ function OrderPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!svc || !user) return;
+    if (svc.is_active === false || svc.available === false)
+      return toast.error("Service indisponible pour le moment");
     if (!validLink) return toast.error("Lien invalide");
     if (quantity < svc.min_quantity || quantity > svc.max_quantity)
       return toast.error(`Quantité entre ${svc.min_quantity} et ${svc.max_quantity}`);
     if (insufficient) return toast.error("Solde insuffisant — rechargez votre compte");
+
 
     setBusy(true);
     // Atomic-ish: insert order then decrement balance
