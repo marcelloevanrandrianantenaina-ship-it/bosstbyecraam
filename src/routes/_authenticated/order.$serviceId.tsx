@@ -48,10 +48,13 @@ function OrderPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!svc || !user) return;
+    if (svc.is_active === false || svc.available === false)
+      return toast.error("Service indisponible pour le moment");
     if (!validLink) return toast.error("Lien invalide");
     if (quantity < svc.min_quantity || quantity > svc.max_quantity)
       return toast.error(`Quantité entre ${svc.min_quantity} et ${svc.max_quantity}`);
     if (insufficient) return toast.error("Solde insuffisant — rechargez votre compte");
+
 
     setBusy(true);
     // Atomic-ish: insert order then decrement balance
