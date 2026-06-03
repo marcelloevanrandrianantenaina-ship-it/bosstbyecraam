@@ -416,6 +416,9 @@ function ServicesAdmin() {
       margin_pct: Number(s.margin_pct ?? 20), min_quantity: Number(s.min_quantity ?? 100),
       max_quantity: Number(s.max_quantity ?? 100000), estimated_time: s.estimated_time,
       badge: s.badge, is_active: s.is_active, sort_order: Number(s.sort_order ?? 0),
+      discount_pct: Math.max(0, Math.min(90, Number(s.discount_pct ?? 0))),
+      popularity_pct: Math.max(0, Math.min(100, Number(s.popularity_pct ?? 85))),
+      available: s.available !== false,
     };
     const { error } = s.id
       ? await supabase.from("services").update(payload).eq("id", s.id)
