@@ -39,7 +39,7 @@ function Index() {
   async function load() {
     setSpin(true);
     const [{ data: svc }, { count: uCount }, { count: oCount }] = await Promise.all([
-      supabase.from("services").select("id, name, description, price_per_1k, estimated_time, badge, platform")
+      supabase.from("services").select("id, name, description, price_per_1k, estimated_time, badge, platform, discount_pct, popularity_pct, available")
         .eq("is_active", true).order("sort_order", { ascending: true }),
       supabase.from("profiles").select("id", { count: "exact", head: true }),
       supabase.from("orders").select("id", { count: "exact", head: true }),
