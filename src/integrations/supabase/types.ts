@@ -294,9 +294,11 @@ export type Database = {
       }
       services: {
         Row: {
+          available: boolean
           badge: Database["public"]["Enums"]["service_badge"]
           created_at: string
           description: string | null
+          discount_pct: number
           estimated_time: string | null
           id: string
           is_active: boolean
@@ -305,15 +307,18 @@ export type Database = {
           min_quantity: number
           name: string
           platform: Database["public"]["Enums"]["service_platform"]
+          popularity_pct: number
           price_per_1k: number
           sort_order: number
           supplier_price_per_1k: number
           updated_at: string
         }
         Insert: {
+          available?: boolean
           badge?: Database["public"]["Enums"]["service_badge"]
           created_at?: string
           description?: string | null
+          discount_pct?: number
           estimated_time?: string | null
           id?: string
           is_active?: boolean
@@ -322,15 +327,18 @@ export type Database = {
           min_quantity?: number
           name: string
           platform: Database["public"]["Enums"]["service_platform"]
+          popularity_pct?: number
           price_per_1k?: number
           sort_order?: number
           supplier_price_per_1k?: number
           updated_at?: string
         }
         Update: {
+          available?: boolean
           badge?: Database["public"]["Enums"]["service_badge"]
           created_at?: string
           description?: string | null
+          discount_pct?: number
           estimated_time?: string | null
           id?: string
           is_active?: boolean
@@ -339,6 +347,7 @@ export type Database = {
           min_quantity?: number
           name?: string
           platform?: Database["public"]["Enums"]["service_platform"]
+          popularity_pct?: number
           price_per_1k?: number
           sort_order?: number
           supplier_price_per_1k?: number
