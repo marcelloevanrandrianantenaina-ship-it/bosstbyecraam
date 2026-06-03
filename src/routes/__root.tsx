@@ -12,6 +12,8 @@ import appCss from "../styles.css?url";
 import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "@/components/ui/sonner";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
 
 function NotFoundComponent() {
   return (
