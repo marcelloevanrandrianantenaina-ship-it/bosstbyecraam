@@ -19,6 +19,7 @@ type Service = {
   name: string; description: string | null;
   price_per_1k: number; min_quantity: number; max_quantity: number;
   estimated_time: string | null; platform: string;
+  available?: boolean | null; is_active?: boolean | null;
 };
 
 function OrderPage() {
@@ -32,7 +33,7 @@ function OrderPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    supabase.from("services").select("id, name, description, price_per_1k, min_quantity, max_quantity, estimated_time, platform")
+    supabase.from("services").select("id, name, description, price_per_1k, min_quantity, max_quantity, estimated_time, platform, available, is_active")
       .eq("id", serviceId).maybeSingle().then(({ data }) => {
         const s = data as Service | null;
         setSvc(s);
