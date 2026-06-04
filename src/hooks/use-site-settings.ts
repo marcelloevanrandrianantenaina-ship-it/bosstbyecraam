@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 export type SiteSettings = {
@@ -43,8 +42,6 @@ const DEFAULTS: SiteSettings = {
 };
 
 export function useSiteSettings() {
-  const qc = useQueryClient();
-
   const query = useQuery({
     queryKey: ["site_settings"],
     queryFn: async (): Promise<SiteSettings> => {
@@ -54,27 +51,10 @@ export function useSiteSettings() {
         .eq("id", 1)
         .maybeSingle();
       if (error || !data) return DEFAULTS;
-      return data as unknown as SiteSettings;
+      return { ...DEFAULTS, ...(data as any) } as SiteSettings;
     },
     staleTime: 60_000,
   });
-
-  // Live updates when admin edits — unique channel name per hook instance
-  // so multiple consumers don't reuse the same subscribed channel.
-  useEffect(() => {
-    const channelName = `site_settings_live_${Math.random().toString(36).slice(2)}`;
-    const ch = supabase
-      .channel(channelName)
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "site_settings" },
-        () => qc.invalidateQueries({ queryKey: ["site_settings"] }),
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(ch);
-    };
-  }, [qc]);
 
   return { settings: query.data ?? DEFAULTS, isLoading: query.isLoading, refresh: query.refetch };
 }

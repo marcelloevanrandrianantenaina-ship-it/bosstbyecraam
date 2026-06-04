@@ -11,17 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
-import { Route as AuthenticatedTransferRouteImport } from './routes/_authenticated/transfer'
-import { Route as AuthenticatedRechargeRouteImport } from './routes/_authenticated/recharge'
-import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
-import { Route as AuthenticatedOrdersRouteImport } from './routes/_authenticated/orders'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
-import { Route as AuthenticatedOrderServiceIdRouteImport } from './routes/_authenticated/order.$serviceId'
-import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -31,10 +22,6 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -47,142 +34,36 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedTransferRoute = AuthenticatedTransferRouteImport.update({
-  id: '/transfer',
-  path: '/transfer',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedRechargeRoute = AuthenticatedRechargeRouteImport.update({
-  id: '/recharge',
-  path: '/recharge',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedOrdersRoute = AuthenticatedOrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedOrderServiceIdRoute =
-  AuthenticatedOrderServiceIdRouteImport.update({
-    id: '/order/$serviceId',
-    path: '/order/$serviceId',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAdminSettingsRoute =
-  AuthenticatedAdminSettingsRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/admin': typeof AuthenticatedAdminRouteWithChildren
-  '/dashboard': typeof AuthenticatedDashboardRoute
-  '/orders': typeof AuthenticatedOrdersRoute
-  '/profile': typeof AuthenticatedProfileRoute
-  '/recharge': typeof AuthenticatedRechargeRoute
-  '/transfer': typeof AuthenticatedTransferRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
-  '/order/$serviceId': typeof AuthenticatedOrderServiceIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/admin': typeof AuthenticatedAdminRouteWithChildren
-  '/dashboard': typeof AuthenticatedDashboardRoute
-  '/orders': typeof AuthenticatedOrdersRoute
-  '/profile': typeof AuthenticatedProfileRoute
-  '/recharge': typeof AuthenticatedRechargeRoute
-  '/transfer': typeof AuthenticatedTransferRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
-  '/order/$serviceId': typeof AuthenticatedOrderServiceIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
-  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/orders': typeof AuthenticatedOrdersRoute
-  '/_authenticated/profile': typeof AuthenticatedProfileRoute
-  '/_authenticated/recharge': typeof AuthenticatedRechargeRoute
-  '/_authenticated/transfer': typeof AuthenticatedTransferRoute
   '/admin/login': typeof AdminLoginRoute
-  '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
-  '/_authenticated/order/$serviceId': typeof AuthenticatedOrderServiceIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/auth'
-    | '/reset-password'
-    | '/admin'
-    | '/dashboard'
-    | '/orders'
-    | '/profile'
-    | '/recharge'
-    | '/transfer'
-    | '/admin/login'
-    | '/admin/settings'
-    | '/order/$serviceId'
+  fullPaths: '/' | '/auth' | '/reset-password' | '/admin/login'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/auth'
-    | '/reset-password'
-    | '/admin'
-    | '/dashboard'
-    | '/orders'
-    | '/profile'
-    | '/recharge'
-    | '/transfer'
-    | '/admin/login'
-    | '/admin/settings'
-    | '/order/$serviceId'
-  id:
-    | '__root__'
-    | '/'
-    | '/_authenticated'
-    | '/auth'
-    | '/reset-password'
-    | '/_authenticated/admin'
-    | '/_authenticated/dashboard'
-    | '/_authenticated/orders'
-    | '/_authenticated/profile'
-    | '/_authenticated/recharge'
-    | '/_authenticated/transfer'
-    | '/admin/login'
-    | '/_authenticated/admin/settings'
-    | '/_authenticated/order/$serviceId'
+  to: '/' | '/auth' | '/reset-password' | '/admin/login'
+  id: '__root__' | '/' | '/auth' | '/reset-password' | '/admin/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   AdminLoginRoute: typeof AdminLoginRoute
@@ -204,13 +85,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -225,103 +99,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/transfer': {
-      id: '/_authenticated/transfer'
-      path: '/transfer'
-      fullPath: '/transfer'
-      preLoaderRoute: typeof AuthenticatedTransferRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/recharge': {
-      id: '/_authenticated/recharge'
-      path: '/recharge'
-      fullPath: '/recharge'
-      preLoaderRoute: typeof AuthenticatedRechargeRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/profile': {
-      id: '/_authenticated/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof AuthenticatedProfileRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/orders': {
-      id: '/_authenticated/orders'
-      path: '/orders'
-      fullPath: '/orders'
-      preLoaderRoute: typeof AuthenticatedOrdersRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/dashboard': {
-      id: '/_authenticated/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin': {
-      id: '/_authenticated/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedAdminRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/order/$serviceId': {
-      id: '/_authenticated/order/$serviceId'
-      path: '/order/$serviceId'
-      fullPath: '/order/$serviceId'
-      preLoaderRoute: typeof AuthenticatedOrderServiceIdRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/admin/settings': {
-      id: '/_authenticated/admin/settings'
-      path: '/settings'
-      fullPath: '/admin/settings'
-      preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
   }
 }
 
-interface AuthenticatedAdminRouteChildren {
-  AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
-}
-
-const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
-  AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
-}
-
-const AuthenticatedAdminRouteWithChildren =
-  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
-
-interface AuthenticatedRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRoute
-  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
-  AuthenticatedRechargeRoute: typeof AuthenticatedRechargeRoute
-  AuthenticatedTransferRoute: typeof AuthenticatedTransferRoute
-  AuthenticatedOrderServiceIdRoute: typeof AuthenticatedOrderServiceIdRoute
-}
-
-const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
-  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedOrdersRoute: AuthenticatedOrdersRoute,
-  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
-  AuthenticatedRechargeRoute: AuthenticatedRechargeRoute,
-  AuthenticatedTransferRoute: AuthenticatedTransferRoute,
-  AuthenticatedOrderServiceIdRoute: AuthenticatedOrderServiceIdRoute,
-}
-
-const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
-  AuthenticatedRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   AdminLoginRoute: AdminLoginRoute,
@@ -329,3 +111,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
