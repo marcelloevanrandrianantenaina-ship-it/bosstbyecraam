@@ -357,6 +357,9 @@ export type Database = {
       }
       site_settings: {
         Row: {
+          admin_gate_1: string | null
+          admin_gate_2: string | null
+          admin_gate_3: string | null
           facebook_url: string | null
           footer_text: string
           id: number
@@ -377,6 +380,9 @@ export type Database = {
           whatsapp_number: string
         }
         Insert: {
+          admin_gate_1?: string | null
+          admin_gate_2?: string | null
+          admin_gate_3?: string | null
           facebook_url?: string | null
           footer_text?: string
           id?: number
@@ -397,6 +403,9 @@ export type Database = {
           whatsapp_number?: string
         }
         Update: {
+          admin_gate_1?: string | null
+          admin_gate_2?: string | null
+          admin_gate_3?: string | null
           facebook_url?: string | null
           footer_text?: string
           id?: number
@@ -474,6 +483,10 @@ export type Database = {
           new_balance: number
           ok: boolean
         }[]
+      }
+      verify_admin_gate: {
+        Args: { _p1: string; _p2: string; _p3: string }
+        Returns: boolean
       }
     }
     Enums: {
