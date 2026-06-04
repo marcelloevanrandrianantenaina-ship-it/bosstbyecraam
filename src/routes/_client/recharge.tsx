@@ -10,7 +10,7 @@ import { Loader2, Wallet, Copy, Check, Phone, User2, Rocket, AlertCircle } from 
 import { formatPrice } from "@/lib/constants";
 import { useSiteSettings } from "@/hooks/use-site-settings";
 
-export const Route = createFileRoute("/_authenticated/recharge")({
+export const Route = createFileRoute("/_client/recharge")({
   component: RechargePage,
 });
 
@@ -76,7 +76,6 @@ function RechargePage() {
     setError(null);
     setBusy(true);
     const refClean = reference.trim();
-    // duplicate check
     const { data: dup } = await supabase
       .from("recharges")
       .select("id")
@@ -108,7 +107,6 @@ function RechargePage() {
         <p className="text-xs text-muted-foreground">Paiement MVola / Yas · validation sous 24h</p>
       </div>
 
-      {/* Balance */}
       <div className="relative glass-strong rounded-2xl p-5 border-glow overflow-hidden">
         <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-accent/20 blur-3xl" />
         <div className="text-[11px] uppercase tracking-wider text-muted-foreground">Solde actuel</div>
@@ -116,7 +114,6 @@ function RechargePage() {
         <div className="text-[11px] text-muted-foreground mt-1">Client #{profile?.client_id}</div>
       </div>
 
-      {/* MVola number card */}
       <div className="glass rounded-2xl p-5 border border-accent/30 glow-soft space-y-3">
         <div className="text-sm font-bold flex items-center gap-2">
           <Phone className="h-4 w-4 text-accent" />
@@ -138,45 +135,6 @@ function RechargePage() {
         </div>
       </div>
 
-      {/* Instructions */}
-      <div className="glass rounded-2xl p-5 space-y-3 leading-relaxed">
-        <div className="text-sm font-bold">Fomba famenoana azy 👇</div>
-        <p className="text-xs text-muted-foreground">
-          Mba hampidirana ny volanao ao anatin'ny site ato dia transfereo @<span className="text-accent font-semibold">{MVOLA_NUMBER}</span> ilay vola.
-        </p>
-
-        <div className="text-sm font-bold pt-1">💥 Fomba famenoana ilay cage 👇</div>
-
-        <div className="space-y-2 text-xs">
-          <div className="rounded-xl bg-secondary/50 border border-border/60 p-3">
-            <div className="font-semibold text-foreground mb-1">💥 Montant (Vola nalefanao tany @{MVOLA_NUMBER}) ✅</div>
-            <p className="text-muted-foreground">Soraty ny vola nalefanao tamin'ny findainao.</p>
-            <p className="text-muted-foreground mt-1">
-              Ohatra : Raha <span className="text-accent font-semibold">5000</span> no nalefanao dia <span className="text-accent font-semibold">5000</span> fotsiny soratana.
-              <br />(Aza asiana "Ar")
-            </p>
-          </div>
-
-          <div className="rounded-xl bg-secondary/50 border border-border/60 p-3">
-            <div className="font-semibold text-foreground mb-1">💥 Votre numéro (Laharana nandefasana ilay vola) ✅</div>
-            <p className="text-muted-foreground">Soraty ny numéro nampiasainao nandefasana ilay vola.</p>
-            <p className="text-muted-foreground mt-1">(Yas na MVola ihany)</p>
-          </div>
-
-          <div className="rounded-xl bg-secondary/50 border border-border/60 p-3">
-            <div className="font-semibold text-foreground mb-1">💥 Référence (ID transaction tao amin'ny SMS) ✅</div>
-            <p className="text-muted-foreground">Ity no tena zava-dehibe indrindra.</p>
-            <p className="text-muted-foreground mt-1">
-              Kopiavo tsara ilay <span className="text-accent font-semibold">Reference</span> na <span className="text-accent font-semibold">Transaction ID</span> izay azonao tamin'ny SMS.
-            </p>
-            <p className="text-muted-foreground mt-1">
-              Ohatra : <span className="text-accent font-semibold">1416328828</span> na <span className="text-accent font-semibold">3c7ee2f5</span>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Form */}
       <div className="glass-strong rounded-2xl p-5 border border-accent/30 space-y-4">
         <div className="text-sm font-bold flex items-center gap-2"><Rocket className="h-4 w-4 text-accent" />Envoyer ma preuve</div>
 
@@ -239,7 +197,6 @@ function RechargePage() {
         </Button>
       </div>
 
-      {/* History */}
       <div className="glass rounded-2xl p-4">
         <h2 className="font-bold mb-2 flex items-center gap-2 text-sm"><Wallet className="h-4 w-4 text-accent" />Historique des recharges</h2>
         {list === null && <div className="space-y-2">{Array.from({ length: 3 }).map((_, i) => <div key={i} className="skeleton h-12" />)}</div>}

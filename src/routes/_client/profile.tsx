@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { UserCircle2, Copy, Loader2, Save, Wallet } from "lucide-react";
 import { formatPrice } from "@/lib/constants";
 
-export const Route = createFileRoute("/_authenticated/profile")({
+export const Route = createFileRoute("/_client/profile")({
   component: ProfilePage,
 });
 
@@ -46,7 +46,7 @@ function ProfilePage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6 space-y-5 fade-in">
+    <div className="mx-auto max-w-2xl px-4 py-6 space-y-5 fade-in pb-24">
       <div>
         <h1 className="text-2xl font-black">Mon profil</h1>
         <p className="text-xs text-muted-foreground">Gérez vos informations personnelles</p>

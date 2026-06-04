@@ -1,23 +1,16 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Shield, Loader2, Lock, Mail, KeyRound } from "lucide-react";
+import { Shield, Loader2, Lock, Mail, KeyRound, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({ meta: [{ title: "Admin — ẞoost-by Ecr_aaM" }] }),
   component: AdminLoginPage,
 });
-
-// 2nd-layer admin gate (in addition to Supabase admin role).
-// These are stored client-side intentionally as a soft gate; the real
-// authorization comes from the Supabase admin role check.
-const GATE_1 = "26mars2008";
-const GATE_2 = "admin26mars2008";
-const GATE_3 = "26mars2008";
 
 function AdminLoginPage() {
   const navigate = useNavigate();
@@ -33,12 +26,11 @@ function AdminLoginPage() {
     e.preventDefault();
     setBusy(true);
     const { data: auth, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) { setBusy(false); return toast.error("Identifiants incorrects"); }
-    // Verify admin role
+    if (error || !auth.user) { setBusy(false); return toast.error("Identifiants incorrects"); }
     const { data: roles } = await supabase
       .from("user_roles")
       .select("role")
-      .eq("user_id", auth.user!.id);
+      .eq("user_id", auth.user.id);
     const isAdmin = (roles ?? []).some((r: any) => r.role === "admin" || r.role === "sub_admin");
     setBusy(false);
     if (!isAdmin) {
@@ -48,9 +40,12 @@ function AdminLoginPage() {
     setStep("gate");
   }
 
-  function verifyGate(e: React.FormEvent) {
+  async function verifyGate(e: React.FormEvent) {
     e.preventDefault();
-    if (p1 !== GATE_1 || p2 !== GATE_2 || p3 !== GATE_3) {
+    setBusy(true);
+    const { data, error } = await supabase.rpc("verify_admin_gate" as any, { _p1: p1, _p2: p2, _p3: p3 });
+    setBusy(false);
+    if (error || data !== true) {
       toast.error("ACCÈS REFUSÉ");
       setP1(""); setP2(""); setP3("");
       return;
@@ -63,6 +58,9 @@ function AdminLoginPage() {
   return (
     <div className="min-h-screen grid place-items-center px-4 py-8">
       <div className="w-full max-w-md fade-in">
+        <div className="mb-4">
+          <Button asChild variant="ghost" size="sm" className="gap-1.5"><Link to="/auth"><ArrowLeft className="h-4 w-4" />Espace client</Link></Button>
+        </div>
         <div className="text-center mb-6">
           <div className="mx-auto h-14 w-14 rounded-2xl gradient-primary grid place-items-center glow mb-3">
             <Shield className="h-7 w-7 text-primary-foreground" />
@@ -109,7 +107,8 @@ function AdminLoginPage() {
                   </div>
                 </div>
               ))}
-              <Button type="submit" className="w-full gradient-primary text-primary-foreground glow-soft">
+              <Button type="submit" disabled={busy} className="w-full gradient-primary text-primary-foreground glow-soft">
+                {busy && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 Déverrouiller la console
               </Button>
             </form>

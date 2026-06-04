@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Loader2, Link as LinkIcon, ArrowLeft, Wallet } from "lucide-react";
 import { formatPrice } from "@/lib/constants";
 
-export const Route = createFileRoute("/_authenticated/order/$serviceId")({
+export const Route = createFileRoute("/_client/order/$serviceId")({
   component: OrderPage,
 });
 
@@ -23,7 +23,7 @@ type Service = {
 };
 
 function OrderPage() {
-  const { serviceId } = useParams({ from: "/_authenticated/order/$serviceId" });
+  const { serviceId } = useParams({ from: "/_client/order/$serviceId" });
   const { user, profile, refresh } = useAuth();
   const navigate = useNavigate();
   const [svc, setSvc] = useState<Service | null>(null);
@@ -55,10 +55,8 @@ function OrderPage() {
       return toast.error(`Quantité entre ${svc.min_quantity} et ${svc.max_quantity}`);
     if (insufficient) return toast.error("Solde insuffisant — rechargez votre compte");
 
-
     setBusy(true);
-    // Atomic-ish: insert order then decrement balance
-    const { data: order, error } = await supabase.from("orders").insert({
+    const { error } = await supabase.from("orders").insert({
       user_id: user.id,
       service_id: svc.id,
       service_name: svc.name,
@@ -67,19 +65,12 @@ function OrderPage() {
       unit_price: svc.price_per_1k,
       total_price: total,
       notes: notes || null,
-    }).select("id").single();
+    });
     if (error) { setBusy(false); return toast.error(error.message); }
 
     const newBalance = (profile?.balance ?? 0) - total;
     const { error: e2 } = await supabase.from("profiles").update({ balance: newBalance }).eq("id", user.id);
     if (e2) { setBusy(false); return toast.error("Erreur débit solde"); }
-
-    await supabase.from("notifications").insert({
-      user_id: user.id,
-      title: "Commande reçue",
-      body: `${svc.name} — ${quantity} (${formatPrice(total)})`,
-      type: "order",
-    });
 
     await refresh();
     setBusy(false);
@@ -90,8 +81,8 @@ function OrderPage() {
   if (!svc) return <div className="mx-auto max-w-2xl px-4 py-8 space-y-3">{Array.from({length:4}).map((_,i)=><div key={i} className="skeleton h-16" />)}</div>;
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6 fade-in">
-      <Button asChild variant="ghost" size="sm" className="mb-3"><Link to="/"><ArrowLeft className="h-4 w-4 mr-1.5" />Retour</Link></Button>
+    <div className="mx-auto max-w-2xl px-4 py-6 fade-in pb-24">
+      <Button asChild variant="ghost" size="sm" className="mb-3"><Link to="/app"><ArrowLeft className="h-4 w-4 mr-1.5" />Retour</Link></Button>
 
       <div className="glass-strong rounded-2xl p-5 mb-4">
         <div className="text-[10px] uppercase tracking-wider text-accent font-semibold">{svc.platform}</div>

@@ -12,8 +12,6 @@ import appCss from "../styles.css?url";
 import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "@/components/ui/sonner";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
-import { supabase } from "@/integrations/supabase/client";
-import { useEffect } from "react";
 
 function NotFoundComponent() {
   return (
@@ -32,23 +30,6 @@ function NotFoundComponent() {
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
-  useEffect(() => {
-    console.error(error);
-    // Fire-and-forget client error log (admin_logs is admin-RLS; ignore failure for non-admins)
-    supabase
-      .from("admin_logs" as any)
-      .insert({
-        action: "client_error",
-        target_type: "ui",
-        metadata: {
-          message: error?.message ?? String(error),
-          stack: error?.stack?.slice(0, 2000) ?? null,
-          path: typeof window !== "undefined" ? window.location.pathname : null,
-          ua: typeof navigator !== "undefined" ? navigator.userAgent : null,
-        },
-      })
-      .then(() => {}, () => {});
-  }, [error]);
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="max-w-md text-center glass rounded-2xl p-8">

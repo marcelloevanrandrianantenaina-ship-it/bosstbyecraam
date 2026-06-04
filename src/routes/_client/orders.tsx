@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { Search } from "lucide-react";
 import { formatPrice } from "@/lib/constants";
 
-export const Route = createFileRoute("/_authenticated/orders")({
+export const Route = createFileRoute("/_client/orders")({
   component: OrdersPage,
 });
 
@@ -39,7 +39,7 @@ function OrdersPage() {
 
   useEffect(() => {
     load();
-    const i = setInterval(load, 15000);
+    const i = setInterval(load, 20000);
     return () => clearInterval(i);
   }, [user]);
 
@@ -49,7 +49,7 @@ function OrdersPage() {
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 fade-in">
+    <div className="mx-auto max-w-6xl px-4 py-6 fade-in pb-24">
       <div className="mb-4">
         <h1 className="text-2xl font-bold">Mes commandes</h1>
         <p className="text-xs text-muted-foreground">Suivi en temps réel · actualisation auto</p>

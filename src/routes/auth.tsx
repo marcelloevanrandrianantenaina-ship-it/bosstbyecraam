@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Mail, Lock, User, ArrowLeft, Zap, Phone } from "lucide-react";
+import { Loader2, Mail, Lock, User, Zap, Phone } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth")({
@@ -25,7 +25,7 @@ function AuthPage() {
   const [fullName, setFullName] = useState("");
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: "/dashboard" });
+    if (!loading && user) navigate({ to: "/app" });
   }, [user, loading, navigate]);
 
   async function signIn(e: React.FormEvent) {
@@ -35,7 +35,7 @@ function AuthPage() {
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Bienvenue 👋");
-    navigate({ to: "/dashboard" });
+    navigate({ to: "/app" });
   }
 
   async function signUp(e: React.FormEvent) {
@@ -44,7 +44,7 @@ function AuthPage() {
     const { error } = await supabase.auth.signUp({
       email, password,
       options: {
-        emailRedirectTo: window.location.origin,
+        emailRedirectTo: window.location.origin + "/app",
         data: { full_name: fullName },
       },
     });
@@ -55,9 +55,9 @@ function AuthPage() {
 
   async function googleSignIn() {
     setBusy(true);
-    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/app" });
     if (res.error) { setBusy(false); return toast.error("Échec connexion Google"); }
-    if (!res.redirected) navigate({ to: "/dashboard" });
+    if (!res.redirected) navigate({ to: "/app" });
   }
 
   async function forgotPassword() {
@@ -69,9 +69,6 @@ function AuthPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-4 pt-4">
-        <Button asChild variant="ghost" size="sm" className="gap-1.5"><Link to="/auth"><ArrowLeft className="h-4 w-4" />Retour</Link></Button>
-      </div>
       <div className="flex-1 flex items-center justify-center px-4 py-8">
         <div className="w-full max-w-md fade-in">
           <div className="text-center mb-6">
@@ -159,6 +156,10 @@ function AuthPage() {
                 </form>
               </TabsContent>
             </Tabs>
+          </div>
+
+          <div className="mt-4 text-center">
+            <Link to="/admin/login" className="text-[10px] text-muted-foreground hover:text-accent">Accès administrateur</Link>
           </div>
         </div>
       </div>
