@@ -50,7 +50,17 @@ function pickServiceIcon(name: string) {
   return Sparkles;
 }
 
-export function ServiceCard({ s }: { s: Service }) {
+export function ServiceCard({
+  s,
+  adminMode = false,
+  onEdit,
+  onDelete,
+}: {
+  s: Service;
+  adminMode?: boolean;
+  onEdit?: (s: Service) => void;
+  onDelete?: (s: Service) => void;
+}) {
   const B = s.badge && s.badge !== "none" ? BADGES[s.badge] : null;
   const time = s.estimated_time?.trim() || "1h";
   const PIcon = PLATFORM_ICON[s.platform] ?? Sparkles;
