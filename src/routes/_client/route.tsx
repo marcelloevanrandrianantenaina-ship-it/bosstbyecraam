@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { AppHeader } from "@/components/AppHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/_client")({
   ssr: false,
@@ -13,9 +14,12 @@ export const Route = createFileRoute("/_client")({
 
 function ClientLayout() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <AppHeader />
-      <Outlet />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <SiteFooter />
     </div>
   );
 }
