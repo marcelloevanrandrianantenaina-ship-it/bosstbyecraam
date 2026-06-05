@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import {
   Clock, Flame, Sparkles, Zap, ArrowRight, ShieldCheck, Crown,
   Heart, Eye, Users, MessageCircle, Share2, Play, UserPlus, ThumbsUp,
-  Facebook, Instagram, Music2, Ban, TrendingUp,
+  Facebook, Instagram, Music2, Ban, TrendingUp, Pencil, Trash2,
 } from "lucide-react";
 import { formatPrice } from "@/lib/constants";
 
