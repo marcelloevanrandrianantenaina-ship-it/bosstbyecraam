@@ -20,7 +20,6 @@ const TABS: { id: Platform; label: string; icon: any }[] = [
 ];
 
 function AppHome() {
-  const { settings } = useSiteSettings();
   const [services, setServices] = useState<Service[] | null>(null);
   const [platform, setPlatform] = useState<Platform>("facebook");
   const [q, setQ] = useState("");
