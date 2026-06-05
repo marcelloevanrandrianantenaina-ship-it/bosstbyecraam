@@ -5,7 +5,7 @@ import { RefreshCcw, Users, ShoppingBag, Search, Facebook, Instagram, Music2 } f
 import { supabase } from "@/integrations/supabase/client";
 import { ServiceCard, type Service } from "@/components/ServiceCard";
 import { Input } from "@/components/ui/input";
-import { useSiteSettings } from "@/hooks/use-site-settings";
+
 
 export const Route = createFileRoute("/_client/app")({
   component: AppHome,
@@ -20,7 +20,6 @@ const TABS: { id: Platform; label: string; icon: any }[] = [
 ];
 
 function AppHome() {
-  const { settings } = useSiteSettings();
   const [services, setServices] = useState<Service[] | null>(null);
   const [platform, setPlatform] = useState<Platform>("facebook");
   const [q, setQ] = useState("");
@@ -135,10 +134,6 @@ function AppHome() {
           )}
         </section>
 
-        <footer className="pt-6 pb-2 text-center text-[11px] text-muted-foreground">
-          <div className="font-bold text-foreground/80">{settings.footer_text}</div>
-          <div className="mt-1">⚡ Service disponible 24h/24</div>
-        </footer>
       </main>
     </div>
   );

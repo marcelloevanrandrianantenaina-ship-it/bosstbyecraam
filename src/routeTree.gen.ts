@@ -25,6 +25,7 @@ import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users
 import { Route as AdminAdminSettingsRouteImport } from './routes/_admin/admin.settings'
 import { Route as AdminAdminServicesRouteImport } from './routes/_admin/admin.services'
 import { Route as AdminAdminRechargesRouteImport } from './routes/_admin/admin.recharges'
+import { Route as AdminAdminAnnouncementsRouteImport } from './routes/_admin/admin.announcements'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -104,6 +105,11 @@ const AdminAdminRechargesRoute = AdminAdminRechargesRouteImport.update({
   path: '/admin/recharges',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminAdminAnnouncementsRoute = AdminAdminAnnouncementsRouteImport.update({
+  id: '/admin/announcements',
+  path: '/admin/announcements',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ClientProfileRoute
   '/recharge': typeof ClientRechargeRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/announcements': typeof AdminAdminAnnouncementsRoute
   '/admin/recharges': typeof AdminAdminRechargesRoute
   '/admin/services': typeof AdminAdminServicesRoute
   '/admin/settings': typeof AdminAdminSettingsRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ClientProfileRoute
   '/recharge': typeof ClientRechargeRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/announcements': typeof AdminAdminAnnouncementsRoute
   '/admin/recharges': typeof AdminAdminRechargesRoute
   '/admin/services': typeof AdminAdminServicesRoute
   '/admin/settings': typeof AdminAdminSettingsRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/_client/profile': typeof ClientProfileRoute
   '/_client/recharge': typeof ClientRechargeRoute
   '/admin/login': typeof AdminLoginRoute
+  '/_admin/admin/announcements': typeof AdminAdminAnnouncementsRoute
   '/_admin/admin/recharges': typeof AdminAdminRechargesRoute
   '/_admin/admin/services': typeof AdminAdminServicesRoute
   '/_admin/admin/settings': typeof AdminAdminSettingsRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/recharge'
     | '/admin/login'
+    | '/admin/announcements'
     | '/admin/recharges'
     | '/admin/services'
     | '/admin/settings'
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/recharge'
     | '/admin/login'
+    | '/admin/announcements'
     | '/admin/recharges'
     | '/admin/services'
     | '/admin/settings'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/_client/profile'
     | '/_client/recharge'
     | '/admin/login'
+    | '/_admin/admin/announcements'
     | '/_admin/admin/recharges'
     | '/_admin/admin/services'
     | '/_admin/admin/settings'
@@ -332,10 +344,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminRechargesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_admin/admin/announcements': {
+      id: '/_admin/admin/announcements'
+      path: '/admin/announcements'
+      fullPath: '/admin/announcements'
+      preLoaderRoute: typeof AdminAdminAnnouncementsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
   }
 }
 
 interface AdminRouteRouteChildren {
+  AdminAdminAnnouncementsRoute: typeof AdminAdminAnnouncementsRoute
   AdminAdminRechargesRoute: typeof AdminAdminRechargesRoute
   AdminAdminServicesRoute: typeof AdminAdminServicesRoute
   AdminAdminSettingsRoute: typeof AdminAdminSettingsRoute
@@ -344,6 +364,7 @@ interface AdminRouteRouteChildren {
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAdminAnnouncementsRoute: AdminAdminAnnouncementsRoute,
   AdminAdminRechargesRoute: AdminAdminRechargesRoute,
   AdminAdminServicesRoute: AdminAdminServicesRoute,
   AdminAdminSettingsRoute: AdminAdminSettingsRoute,
@@ -386,13 +407,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import {
   Clock, Flame, Sparkles, Zap, ArrowRight, ShieldCheck, Crown,
   Heart, Eye, Users, MessageCircle, Share2, Play, UserPlus, ThumbsUp,
-  Facebook, Instagram, Music2, Ban, TrendingUp,
+  Facebook, Instagram, Music2, Ban, TrendingUp, Pencil, Trash2,
 } from "lucide-react";
 import { formatPrice } from "@/lib/constants";
 
@@ -50,7 +50,17 @@ function pickServiceIcon(name: string) {
   return Sparkles;
 }
 
-export function ServiceCard({ s }: { s: Service }) {
+export function ServiceCard({
+  s,
+  adminMode = false,
+  onEdit,
+  onDelete,
+}: {
+  s: Service;
+  adminMode?: boolean;
+  onEdit?: (s: Service) => void;
+  onDelete?: (s: Service) => void;
+}) {
   const B = s.badge && s.badge !== "none" ? BADGES[s.badge] : null;
   const time = s.estimated_time?.trim() || "1h";
   const PIcon = PLATFORM_ICON[s.platform] ?? Sparkles;
@@ -146,17 +156,49 @@ export function ServiceCard({ s }: { s: Service }) {
         </div>
       )}
 
-      {unavailable && (
+      {unavailable && !adminMode && (
         <div className="pointer-events-none absolute inset-0 rounded-3xl bg-background/55 backdrop-blur-[1px] grid place-items-center">
           <span className="text-[10px] font-black px-3 py-1 rounded-full bg-destructive/85 text-destructive-foreground border border-destructive/40 shadow-[0_0_14px_rgba(239,68,68,0.5)] inline-flex items-center gap-1">
             <Ban className="h-3 w-3" />Indisponible
           </span>
         </div>
       )}
+
+      {adminMode && (
+        <div className="absolute top-2 right-2 z-10 flex gap-1">
+          <button
+            type="button"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit?.(s); }}
+            aria-label="Modifier"
+            className="h-7 w-7 rounded-lg glass-strong border border-primary/40 grid place-items-center text-primary hover:bg-primary/20 active:scale-95"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete?.(s); }}
+            aria-label="Supprimer"
+            className="h-7 w-7 rounded-lg glass-strong border border-destructive/40 grid place-items-center text-destructive hover:bg-destructive/20 active:scale-95"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
     </>
   );
 
   const baseCls = "group relative h-full flex flex-col overflow-hidden rounded-3xl glass border border-white/10 p-3.5 transition-all duration-300";
+
+  if (adminMode) {
+    return (
+      <div
+        className={`${baseCls} ${unavailable ? "opacity-80" : ""} hover:border-primary/40`}
+        aria-label={s.name}
+      >
+        {inner}
+      </div>
+    );
+  }
 
   if (unavailable) {
     return (
