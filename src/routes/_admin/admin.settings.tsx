@@ -39,17 +39,20 @@ function AdminSettings() {
   }
 
   return (
-    <div className="space-y-4 fade-in pb-8">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-black">Paramètres du site</h1>
-          <p className="text-xs text-muted-foreground">Branding, contact et dépôt MVola</p>
-        </div>
-        <Button onClick={save} disabled={saving} className="gradient-primary text-primary-foreground">
-          {saving ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Save className="h-4 w-4 mr-1" />}
-          Enregistrer
-        </Button>
-      </div>
+    <div className="space-y-4 fade-in pb-4">
+      <PageHeader
+        eyebrow="Configuration"
+        title="Paramètres du site"
+        subtitle="Branding, contact et dépôt MVola"
+        icon={Settings2}
+        action={
+          <Button onClick={save} disabled={saving} className="gradient-primary text-primary-foreground glow-soft">
+            {saving ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Save className="h-4 w-4 mr-1" />}
+            Enregistrer
+          </Button>
+        }
+      />
+
 
       <Section icon={Palette} title="Branding">
         <Field label="Nom du site" k="site_name" form={form} set={set} />
