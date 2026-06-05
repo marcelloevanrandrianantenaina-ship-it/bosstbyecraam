@@ -135,10 +135,6 @@ function AppHome() {
           )}
         </section>
 
-        <footer className="pt-6 pb-2 text-center text-[11px] text-muted-foreground">
-          <div className="font-bold text-foreground/80">{settings.footer_text}</div>
-          <div className="mt-1">⚡ Service disponible 24h/24</div>
-        </footer>
       </main>
     </div>
   );
