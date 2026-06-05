@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Users, ShoppingCart, Wallet, TrendingUp } from "lucide-react";
 import { formatPrice } from "@/lib/constants";
 
-export const Route = createFileRoute("/_admin/admin")({
+export const Route = createFileRoute("/_admin/admin/")({
   component: AdminDashboard,
 });
 

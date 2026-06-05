@@ -19,7 +19,7 @@ import { Route as ClientRechargeRouteImport } from './routes/_client/recharge'
 import { Route as ClientProfileRouteImport } from './routes/_client/profile'
 import { Route as ClientOrdersRouteImport } from './routes/_client/orders'
 import { Route as ClientAppRouteImport } from './routes/_client/app'
-import { Route as AdminAdminRouteImport } from './routes/_admin/admin'
+import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
 import { Route as ClientOrderServiceIdRouteImport } from './routes/_client/order.$serviceId'
 import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users'
 import { Route as AdminAdminSettingsRouteImport } from './routes/_admin/admin.settings'
@@ -74,9 +74,9 @@ const ClientAppRoute = ClientAppRouteImport.update({
   path: '/app',
   getParentRoute: () => ClientRouteRoute,
 } as any)
-const AdminAdminRoute = AdminAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const AdminAdminIndexRoute = AdminAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const ClientOrderServiceIdRoute = ClientOrderServiceIdRouteImport.update({
@@ -85,31 +85,30 @@ const ClientOrderServiceIdRoute = ClientOrderServiceIdRouteImport.update({
   getParentRoute: () => ClientRouteRoute,
 } as any)
 const AdminAdminUsersRoute = AdminAdminUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AdminAdminRoute,
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminAdminSettingsRoute = AdminAdminSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AdminAdminRoute,
+  id: '/admin/settings',
+  path: '/admin/settings',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminAdminServicesRoute = AdminAdminServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
-  getParentRoute: () => AdminAdminRoute,
+  id: '/admin/services',
+  path: '/admin/services',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminAdminRechargesRoute = AdminAdminRechargesRouteImport.update({
-  id: '/recharges',
-  path: '/recharges',
-  getParentRoute: () => AdminAdminRoute,
+  id: '/admin/recharges',
+  path: '/admin/recharges',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/admin': typeof AdminAdminRouteWithChildren
   '/app': typeof ClientAppRoute
   '/orders': typeof ClientOrdersRoute
   '/profile': typeof ClientProfileRoute
@@ -120,12 +119,12 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminAdminSettingsRoute
   '/admin/users': typeof AdminAdminUsersRoute
   '/order/$serviceId': typeof ClientOrderServiceIdRoute
+  '/admin/': typeof AdminAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/admin': typeof AdminAdminRouteWithChildren
   '/app': typeof ClientAppRoute
   '/orders': typeof ClientOrdersRoute
   '/profile': typeof ClientProfileRoute
@@ -136,6 +135,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminAdminSettingsRoute
   '/admin/users': typeof AdminAdminUsersRoute
   '/order/$serviceId': typeof ClientOrderServiceIdRoute
+  '/admin': typeof AdminAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -144,7 +144,6 @@ export interface FileRoutesById {
   '/_client': typeof ClientRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/_admin/admin': typeof AdminAdminRouteWithChildren
   '/_client/app': typeof ClientAppRoute
   '/_client/orders': typeof ClientOrdersRoute
   '/_client/profile': typeof ClientProfileRoute
@@ -155,6 +154,7 @@ export interface FileRoutesById {
   '/_admin/admin/settings': typeof AdminAdminSettingsRoute
   '/_admin/admin/users': typeof AdminAdminUsersRoute
   '/_client/order/$serviceId': typeof ClientOrderServiceIdRoute
+  '/_admin/admin/': typeof AdminAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -162,7 +162,6 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
-    | '/admin'
     | '/app'
     | '/orders'
     | '/profile'
@@ -173,12 +172,12 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/users'
     | '/order/$serviceId'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/reset-password'
-    | '/admin'
     | '/app'
     | '/orders'
     | '/profile'
@@ -189,6 +188,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/users'
     | '/order/$serviceId'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -196,7 +196,6 @@ export interface FileRouteTypes {
     | '/_client'
     | '/auth'
     | '/reset-password'
-    | '/_admin/admin'
     | '/_client/app'
     | '/_client/orders'
     | '/_client/profile'
@@ -207,6 +206,7 @@ export interface FileRouteTypes {
     | '/_admin/admin/settings'
     | '/_admin/admin/users'
     | '/_client/order/$serviceId'
+    | '/_admin/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -290,11 +290,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientAppRouteImport
       parentRoute: typeof ClientRouteRoute
     }
-    '/_admin/admin': {
-      id: '/_admin/admin'
+    '/_admin/admin/': {
+      id: '/_admin/admin/'
       path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminAdminRouteImport
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminAdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/_client/order/$serviceId': {
@@ -306,59 +306,49 @@ declare module '@tanstack/react-router' {
     }
     '/_admin/admin/users': {
       id: '/_admin/admin/users'
-      path: '/users'
+      path: '/admin/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AdminAdminUsersRouteImport
-      parentRoute: typeof AdminAdminRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/_admin/admin/settings': {
       id: '/_admin/admin/settings'
-      path: '/settings'
+      path: '/admin/settings'
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminAdminSettingsRouteImport
-      parentRoute: typeof AdminAdminRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/_admin/admin/services': {
       id: '/_admin/admin/services'
-      path: '/services'
+      path: '/admin/services'
       fullPath: '/admin/services'
       preLoaderRoute: typeof AdminAdminServicesRouteImport
-      parentRoute: typeof AdminAdminRoute
+      parentRoute: typeof AdminRouteRoute
     }
     '/_admin/admin/recharges': {
       id: '/_admin/admin/recharges'
-      path: '/recharges'
+      path: '/admin/recharges'
       fullPath: '/admin/recharges'
       preLoaderRoute: typeof AdminAdminRechargesRouteImport
-      parentRoute: typeof AdminAdminRoute
+      parentRoute: typeof AdminRouteRoute
     }
   }
 }
 
-interface AdminAdminRouteChildren {
+interface AdminRouteRouteChildren {
   AdminAdminRechargesRoute: typeof AdminAdminRechargesRoute
   AdminAdminServicesRoute: typeof AdminAdminServicesRoute
   AdminAdminSettingsRoute: typeof AdminAdminSettingsRoute
   AdminAdminUsersRoute: typeof AdminAdminUsersRoute
+  AdminAdminIndexRoute: typeof AdminAdminIndexRoute
 }
 
-const AdminAdminRouteChildren: AdminAdminRouteChildren = {
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAdminRechargesRoute: AdminAdminRechargesRoute,
   AdminAdminServicesRoute: AdminAdminServicesRoute,
   AdminAdminSettingsRoute: AdminAdminSettingsRoute,
   AdminAdminUsersRoute: AdminAdminUsersRoute,
-}
-
-const AdminAdminRouteWithChildren = AdminAdminRoute._addFileChildren(
-  AdminAdminRouteChildren,
-)
-
-interface AdminRouteRouteChildren {
-  AdminAdminRoute: typeof AdminAdminRouteWithChildren
-}
-
-const AdminRouteRouteChildren: AdminRouteRouteChildren = {
-  AdminAdminRoute: AdminAdminRouteWithChildren,
+  AdminAdminIndexRoute: AdminAdminIndexRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
@@ -396,3 +386,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
