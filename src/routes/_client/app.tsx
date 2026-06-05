@@ -5,7 +5,7 @@ import { RefreshCcw, Users, ShoppingBag, Search, Facebook, Instagram, Music2 } f
 import { supabase } from "@/integrations/supabase/client";
 import { ServiceCard, type Service } from "@/components/ServiceCard";
 import { Input } from "@/components/ui/input";
-import { useSiteSettings } from "@/hooks/use-site-settings";
+
 
 export const Route = createFileRoute("/_client/app")({
   component: AppHome,
