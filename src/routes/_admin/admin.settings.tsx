@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Save, Loader2, Palette, Share2, Wallet, Megaphone } from "lucide-react";
+import { Save, Loader2, Palette, Share2, Wallet, Megaphone, Settings2 } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 
 export const Route = createFileRoute("/_admin/admin/settings")({
   component: AdminSettings,
