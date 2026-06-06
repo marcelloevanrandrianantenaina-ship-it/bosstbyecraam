@@ -259,6 +259,10 @@ function AnnouncementsAdmin() {
                 <Label>Active (visible)</Label>
                 <Switch checked={editing.is_active !== false} onCheckedChange={(v) => setEditing({ ...editing, is_active: v })} />
               </div>
+              <div className="col-span-2 flex items-center justify-between glass rounded-xl p-3">
+                <Label className="inline-flex items-center gap-1.5"><Pin className="h-3.5 w-3.5 text-gold" /> Épingler en haut</Label>
+                <Switch checked={!!editing.is_pinned} onCheckedChange={(v) => setEditing({ ...editing, is_pinned: v })} />
+              </div>
             </div>
           )}
           <DialogFooter>
