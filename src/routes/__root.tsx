@@ -10,6 +10,7 @@ import {
 
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/hooks/use-auth";
+import { useDataSaverBootstrap } from "@/hooks/use-data-saver";
 import { Toaster } from "@/components/ui/sonner";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 
@@ -79,10 +80,16 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <DataSaverBoot />
         <Outlet />
         <WhatsAppFloat />
         <Toaster position="top-center" theme="dark" richColors />
       </AuthProvider>
     </QueryClientProvider>
   );
+}
+
+function DataSaverBoot() {
+  useDataSaverBootstrap();
+  return null;
 }

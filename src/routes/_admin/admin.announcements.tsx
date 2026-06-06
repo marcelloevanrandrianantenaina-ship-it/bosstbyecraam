@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import {
-  Megaphone, Plus, Pencil, Trash2, Loader2, Info, AlertTriangle, CheckCircle2, Sparkles,
+  Megaphone, Plus, Pencil, Trash2, Loader2, Info, AlertTriangle, CheckCircle2, Sparkles, Pin, PinOff,
 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 
@@ -39,6 +39,7 @@ function emptyAnnouncement(): any {
     content: "",
     type: "info",
     is_active: true,
+    is_pinned: false,
     sort_order: 0,
     starts_at: null,
     ends_at: null,
@@ -54,6 +55,7 @@ function AnnouncementsAdmin() {
     const { data } = await supabase
       .from("announcements")
       .select("*")
+      .order("is_pinned", { ascending: false })
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: false });
     setRows(data ?? []);
@@ -67,6 +69,7 @@ function AnnouncementsAdmin() {
       content: a.content ?? "",
       type: a.type ?? "info",
       is_active: a.is_active !== false,
+      is_pinned: !!a.is_pinned,
       sort_order: Number(a.sort_order ?? 0),
       starts_at: a.starts_at || null,
       ends_at: a.ends_at || null,
@@ -95,6 +98,16 @@ function AnnouncementsAdmin() {
       .update({ is_active: !a.is_active })
       .eq("id", a.id);
     if (error) return toast.error(error.message);
+    load();
+  }
+
+  async function togglePin(a: any) {
+    const { error } = await supabase
+      .from("announcements")
+      .update({ is_pinned: !a.is_pinned })
+      .eq("id", a.id);
+    if (error) return toast.error(error.message);
+    toast.success(a.is_pinned ? "Désépinglée" : "Épinglée");
     load();
   }
 
@@ -142,6 +155,11 @@ function AnnouncementsAdmin() {
                     <span className={`text-[9px] font-black px-2 py-0.5 rounded-full border ${meta.cls}`}>
                       {meta.label.toUpperCase()}
                     </span>
+                    {a.is_pinned && (
+                      <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-[oklch(0.82_0.12_90)]/20 text-gold border border-[oklch(0.82_0.12_90)]/40 inline-flex items-center gap-0.5">
+                        <Pin className="h-2.5 w-2.5" /> ÉPINGLÉ
+                      </span>
+                    )}
                     {!a.is_active && (
                       <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-muted/40 text-muted-foreground border border-white/10">
                         INACTIVE
@@ -161,9 +179,16 @@ function AnnouncementsAdmin() {
                   <Switch checked={a.is_active} onCheckedChange={() => toggleActive(a)} />
                   <div className="flex gap-1">
                     <button
+                      onClick={() => togglePin(a)}
+                      aria-label={a.is_pinned ? "Désépingler" : "Épingler"}
+                      className={`h-7 w-7 rounded-lg glass-strong border grid place-items-center active:scale-95 ${a.is_pinned ? "border-[oklch(0.82_0.12_90)]/50 text-gold bg-[oklch(0.82_0.12_90)]/15" : "border-white/15 text-muted-foreground hover:bg-white/5"}`}
+                    >
+                      {a.is_pinned ? <PinOff className="h-3.5 w-3.5" /> : <Pin className="h-3.5 w-3.5" />}
+                    </button>
+                    <button
                       onClick={() => setEditing(a)}
                       aria-label="Modifier"
-                      className="h-7 w-7 rounded-lg glass-strong border border-primary/40 grid place-items-center text-primary hover:bg-primary/20 active:scale-95"
+                      className="h-7 w-7 rounded-lg glass-strong border border-accent/40 grid place-items-center text-accent hover:bg-accent/20 active:scale-95"
                     >
                       <Pencil className="h-3.5 w-3.5" />
                     </button>
@@ -233,6 +258,10 @@ function AnnouncementsAdmin() {
               <div className="col-span-2 flex items-center justify-between glass rounded-xl p-3">
                 <Label>Active (visible)</Label>
                 <Switch checked={editing.is_active !== false} onCheckedChange={(v) => setEditing({ ...editing, is_active: v })} />
+              </div>
+              <div className="col-span-2 flex items-center justify-between glass rounded-xl p-3">
+                <Label className="inline-flex items-center gap-1.5"><Pin className="h-3.5 w-3.5 text-gold" /> Épingler en haut</Label>
+                <Switch checked={!!editing.is_pinned} onCheckedChange={(v) => setEditing({ ...editing, is_pinned: v })} />
               </div>
             </div>
           )}
