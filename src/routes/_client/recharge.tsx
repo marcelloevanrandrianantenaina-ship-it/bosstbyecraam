@@ -135,6 +135,19 @@ function RechargePage() {
         </div>
       </div>
 
+      {settings.mvola_instructions && (
+        <div className="glass rounded-2xl p-4 border border-[oklch(0.68_0.22_295)]/30">
+          <div className="text-sm font-black text-violet flex items-center gap-2">
+            <AlertCircle className="h-4 w-4" /> Instructions de dépôt
+          </div>
+          <p className="text-[12px] text-foreground/90 mt-2 whitespace-pre-line leading-relaxed">
+            {settings.mvola_instructions}
+          </p>
+        </div>
+      )}
+
+
+
       <div className="glass-strong rounded-2xl p-5 border border-accent/30 space-y-4">
         <div className="text-sm font-bold flex items-center gap-2"><Rocket className="h-4 w-4 text-accent" />Envoyer ma preuve</div>
 

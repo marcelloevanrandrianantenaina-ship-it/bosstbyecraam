@@ -39,6 +39,7 @@ function emptyAnnouncement(): any {
     content: "",
     type: "info",
     is_active: true,
+    is_pinned: false,
     sort_order: 0,
     starts_at: null,
     ends_at: null,
