@@ -1,11 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { RefreshCcw, Users, ShoppingBag, Search, Facebook, Instagram, Music2 } from "lucide-react";
+import {
+  RefreshCcw, Users, ShoppingBag, Search, Facebook, Instagram, Music2, Wallet,
+} from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { ServiceCard, type Service } from "@/components/ServiceCard";
+import { AnnouncementBanner } from "@/components/AnnouncementBanner";
 import { Input } from "@/components/ui/input";
-
+import { useAuth } from "@/hooks/use-auth";
+import { formatPrice } from "@/lib/constants";
 
 export const Route = createFileRoute("/_client/app")({
   component: AppHome,
@@ -20,6 +24,7 @@ const TABS: { id: Platform; label: string; icon: any }[] = [
 ];
 
 function AppHome() {
+  const { profile } = useAuth();
   const [services, setServices] = useState<Service[] | null>(null);
   const [platform, setPlatform] = useState<Platform>("facebook");
   const [q, setQ] = useState("");
@@ -48,16 +53,30 @@ function AppHome() {
   return (
     <div className="pb-24">
       <main className="mx-auto max-w-6xl px-3 pt-4 space-y-4 fade-in">
-        <section className="rounded-2xl glass-strong border border-primary/20 px-4 py-3 glow-soft text-center">
-          <div className="text-[10px] uppercase tracking-wider text-accent font-bold">Vondrom-piaraha-monina</div>
-          <div className="text-sm font-black mt-0.5">
-            Efa mahery ny <span className="text-gradient">{stats.users.toLocaleString("fr-FR")}</span> olona mampiasa ity plateforme ity
+        {/* Balance hero */}
+        <section className="rounded-3xl gradient-emerald p-0.5 glow">
+          <div className="rounded-[22px] bg-background/85 px-4 py-3.5 flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="text-[10px] uppercase tracking-wider text-primary font-black">Solde</div>
+              <div className="text-2xl font-black text-emerald-grad leading-none mt-1">
+                {formatPrice(profile?.balance ?? 0)}
+              </div>
+              <div className="text-[10px] text-muted-foreground mt-1">Client #{profile?.client_id ?? "—"}</div>
+            </div>
+            <Link
+              to="/recharge"
+              className="shrink-0 inline-flex items-center gap-1.5 h-11 px-4 rounded-2xl gradient-cyan text-accent-foreground font-black text-sm glow-cyan active:scale-95"
+            >
+              <Wallet className="h-4 w-4" /> Recharger
+            </Link>
           </div>
         </section>
 
+        <AnnouncementBanner />
+
         <section className="grid grid-cols-2 gap-3">
-          <StatPill icon={Users} label="Clients actifs" value={stats.users.toLocaleString("fr-FR")} accent />
-          <StatPill icon={ShoppingBag} label="Commandes" value={stats.orders.toLocaleString("fr-FR")} />
+          <StatPill icon={Users} label="Clients actifs" value={stats.users.toLocaleString("fr-FR")} variant="emerald" />
+          <StatPill icon={ShoppingBag} label="Commandes" value={stats.orders.toLocaleString("fr-FR")} variant="cyan" />
         </section>
 
         <section className="flex items-center justify-between pt-1">
@@ -89,16 +108,13 @@ function AppHome() {
                   className={[
                     "relative grid place-items-center rounded-full transition-all duration-300 ease-out active:scale-95",
                     active
-                      ? "h-16 w-16 gradient-primary text-primary-foreground scale-110 shadow-[0_0_32px_-4px_oklch(0.78_0.17_65_/_0.85)] ring-2 ring-primary/50"
-                      : "h-14 w-14 glass-strong border border-white/10 text-muted-foreground group-hover:text-foreground group-hover:border-primary/30",
+                      ? "h-16 w-16 gradient-cyan text-accent-foreground scale-110 glow-cyan ring-2 ring-accent/50"
+                      : "h-14 w-14 glass-strong border border-white/10 text-muted-foreground group-hover:text-foreground group-hover:border-accent/30",
                   ].join(" ")}
                 >
                   <t.icon className={`transition-all ${active ? "h-7 w-7" : "h-6 w-6"}`} />
-                  {active && (
-                    <span className="absolute inset-0 rounded-full animate-pulse ring-1 ring-primary/40 pointer-events-none" />
-                  )}
                 </span>
-                <span className={`text-[10px] font-bold tracking-wide transition-colors ${active ? "text-primary" : "text-muted-foreground"}`}>
+                <span className={`text-[10px] font-bold tracking-wide transition-colors ${active ? "text-accent" : "text-muted-foreground"}`}>
                   {t.label}
                 </span>
               </button>
@@ -128,26 +144,29 @@ function AppHome() {
               Aucun service disponible pour cette catégorie.
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3 auto-rows-fr">
+            <div className="grid grid-cols-2 gap-3 auto-rows-fr stagger">
               {filtered.map((s) => <ServiceCard key={s.id} s={s} />)}
             </div>
           )}
         </section>
-
       </main>
     </div>
   );
 }
 
-function StatPill({ icon: Icon, label, value, accent }: { icon: any; label: string; value: string; accent?: boolean }) {
+function StatPill({
+  icon: Icon, label, value, variant,
+}: { icon: any; label: string; value: string; variant: "emerald" | "cyan" }) {
+  const grad = variant === "emerald" ? "gradient-emerald" : "gradient-cyan";
+  const txt = variant === "emerald" ? "text-emerald-grad" : "text-gradient";
   return (
-    <div className={`glass rounded-2xl p-3 flex items-center gap-3 ${accent ? "border-glow glow-soft" : "border border-white/10"}`}>
-      <div className="h-9 w-9 rounded-xl gradient-primary grid place-items-center shrink-0">
-        <Icon className="h-4 w-4 text-primary-foreground" />
+    <div className="glass rounded-2xl p-3 flex items-center gap-3 border border-white/10">
+      <div className={`h-9 w-9 rounded-xl ${grad} grid place-items-center shrink-0 text-primary-foreground`}>
+        <Icon className="h-4 w-4" />
       </div>
       <div className="min-w-0">
         <div className="text-[10px] uppercase tracking-wider text-muted-foreground truncate">{label}</div>
-        <div className={`font-black leading-none mt-0.5 ${accent ? "text-gradient text-lg" : "text-base"}`}>{value}</div>
+        <div className={`font-black leading-none mt-0.5 ${txt} text-lg`}>{value}</div>
       </div>
     </div>
   );
