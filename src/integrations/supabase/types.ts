@@ -51,6 +51,7 @@ export type Database = {
           ends_at: string | null
           id: string
           is_active: boolean
+          is_pinned: boolean
           sort_order: number
           starts_at: string | null
           title: string
@@ -62,6 +63,7 @@ export type Database = {
           ends_at?: string | null
           id?: string
           is_active?: boolean
+          is_pinned?: boolean
           sort_order?: number
           starts_at?: string | null
           title: string
@@ -73,6 +75,7 @@ export type Database = {
           ends_at?: string | null
           id?: string
           is_active?: boolean
+          is_pinned?: boolean
           sort_order?: number
           starts_at?: string | null
           title?: string
@@ -226,6 +229,7 @@ export type Database = {
           balance: number
           client_id: string
           created_at: string
+          data_saver: boolean
           email: string | null
           full_name: string | null
           id: string
@@ -236,6 +240,7 @@ export type Database = {
           balance?: number
           client_id?: string
           created_at?: string
+          data_saver?: boolean
           email?: string | null
           full_name?: string | null
           id: string
@@ -246,6 +251,7 @@ export type Database = {
           balance?: number
           client_id?: string
           created_at?: string
+          data_saver?: boolean
           email?: string | null
           full_name?: string | null
           id?: string
